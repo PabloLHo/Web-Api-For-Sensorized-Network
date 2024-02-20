@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, initial-scale=1.0, shrink-to-fit=no">
+    <title>Sensorized Network</title>
+    <meta name="description" content="Plataforma que permite simular partidos NBA para observar posibles cambios en rotaciones de cara al futuro.">
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i&amp;display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.css">
+    <link rel="stylesheet" href="static/css/vanilla-zoom.min.css">
+
+    <link rel="stylesheet" href="static/css/andando.css">
+    <link rel="stylesheet" href="static/css/acelerador.css">
+</head>
+
+<style>
+
+    .sensor{
+        padding: 1%;
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    .titulo {
+	text-shadow: 17px -20px 1px #3d85ea
+}
+
+</style>
+
+<body>
+    <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
+            <div class="container"><a class="navbar-brand logo" href="/">RED SENSORIZADA WEB API</a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
+                        <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle active" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            DATOS
+                          </a>
+                          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <form action="/visualizar_datos" method="post">
+                                  <li><input type="submit" class="dropdown-item" name="sensor" value="Acelerómetro"></li>
+                                  <li><input type="submit" class="dropdown-item" name="sensor" value="Barómetro"></li>
+                                  <li><input type="submit" class="dropdown-item" name="sensor" value="Giroscopio"></li>
+                                  <li><input type="submit" class="dropdown-item" name="sensor" value="Magnetómetro"></li>
+                                  <li><input type="submit" class="dropdown-item" name="sensor" value="Podómetro"></li>
+                                  <li><hr class="dropdown-divider"></li>
+                                  <li><input type="submit" class="dropdown-item" name="sensor" value="Todos"></li>
+                              </form>
+                          </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    </nav>
+
+    <main class="page">
+
+        <div class="sensor">
+            <h2 class="titulo" style="text-align: center; margin: 3%;">{{ sensor }}</h2>
+            <div id="Acelerómetro" style="display: none">
+                <div class="row" style="margin: 1%; justify-content: center">
+                    <div class="middle col">
+                      <div class="dash-panel">
+                        <span>0</span>
+                        <span>0.5</span>
+                        <span>1</span>
+                        <span>1.5</span>
+                        <span>2</span>
+                        <span>2.5</span>
+                        <span>3</span>
+                        <span>3.5</span>
+                        <span>4</span>
+                        <span>m/s <sup>2</sup></span>
+                        <div id="dash" class="dash">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="element-card col">
+                        <div class="front-facing">
+                            <h1 id="actual-Acelerómetro" class="abr">0</h1>
+                            <p class="title">m / s <sup>2</sup></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin: 1%; justify-content: center">
+                    <div class="col-lg-9 col-xl-7">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary fw-bold m-0">Aceleración</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area"><canvas id="grafica-Acelerómetro"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="Barómetro" style="display: none"></div>
+            <div id="Giroscopio" style="display: none"></div>
+            <div id="Magnetómetro" style="display: none"></div>
+            <div id="Podómetro" style="display: none">
+                <div class="row">
+                    <div class="man">
+
+              <div class="arm front">
+                <div class="arm__top">
+                  <div class="arm__fore"></div>
+                </div>
+              </div>
+
+              <div class="arm back">
+                <div class="arm__top">
+                  <div class="arm__fore"></div>
+                </div>
+              </div>
+
+              <div class="head">
+                <div class="head__hair"></div>
+                <div class="head__ear"></div>
+                <div class="head__nose"></div>
+                <div class="head__eye"></div>
+              </div>
+
+              <div class="body">
+                <div class="body__belly"></div>
+              </div>
+              <div class="pelvis"></div>
+              <div class="leg">
+                <div class="leg__top">
+                  <div class="leg__fore"></div>
+                </div>
+              </div>
+              <div class="leg back">
+                <div class="leg__top">
+                  <div class="leg__fore"></div>
+                </div>
+              </div>
+                </div>
+                    <div class="element-card col">
+                        <div class="front-facing">
+                            <h1 id="actual-Podómetro" class="abr">8.27</h1>
+                            <p class="title">m / s <sup>2</sup></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin: 1%; justify-content: center">
+                    <div class="col-lg-9 col-xl-7">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary fw-bold m-0">Pasos</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area"><canvas id="grafica-Podómetro"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {# https://codepen.io/kylewetton/pen/yqWMOP #}
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="page-footer dark"></footer>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js"></script>
+    <script src="static/js/vanilla-zoom.js"></script>
+    <script src="static/js/theme.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script>
+
+        var myChart;
+
+        function inicializar(){
+
+            if("{{ sensor }}" == "Todos"){
+
+                document.getElementById("Acelerómetro").style.display = "block";
+                document.getElementById("Giroscopio").style.display = "block";
+                document.getElementById("Podómetro").style.display = "block";
+                document.getElementById("Magnetómetro").style.display = "block";
+                document.getElementById("Barómetro").style.display = "block";
+
+            }else {
+
+                document.getElementById("{{sensor}}").style.display = "block";
+
+            }
+
+            const data2 = [];
+            const fechas = []
+            for (var i = 0; i < 1; i++) {
+                data2.push(Math.random());
+                fechas.push(i)
+            }
+
+            var r = 0;
+            var g = 255;
+            var b = 0;
+            const data = {
+                labels: fechas,
+                datasets: [{
+                    label: "Aceleración",
+                    backgroundColor: 'rgb(' + r + ',' + g + ',' + b +')',
+                    borderColor: 'rgb(' + r + ',' + g + ',' + b +')',
+                    data: data2,
+                }]
+            };
+
+            const config = {
+              type: 'line',
+              data: data,
+              options: {
+                scales: {
+                  x: {
+                    type: "time",
+                    title: {
+                        display: true,
+
+                      text: 'Fecha recogida de datos'
+                    },
+                    time: {
+                        unit: 'month',
+                        stepSize: 1
+                    },
+                    ticks: {
+                        display: true,
+                        source: 'auto'
+                    }
+                  },
+                  y: {
+                    title: {
+                      display: true,
+                      text: ""
+                    }
+                  }
+                }
+              },
+            };
+
+            myChart = new Chart(document.getElementById("grafica-{{ sensor }}"), config);
+            myChart.canvas.parentNode.style.width = '100%';
+
+        }
+
+        window.onload = inicializar;
+
+        function actualizar(){
+            var numero = Math.random() * 4;
+            document.getElementById("actual-{{ sensor }}").innerHTML = numero.toFixed(2);
+            myChart.config.data.labels.push(myChart.config.data.labels[myChart.config.data.labels.length - 1] + 1);
+            myChart.config.data.datasets[0].data.push(numero);
+            myChart.update();
+            if("{{ sensor }}" == "Acelerómetro"){
+                giro = 60 + numero * 57.5;
+                console.log(numero + " " + giro);
+                document.getElementById("dash").style.transform = "rotate(" + giro + "deg)"
+            }
+        }
+
+        window.setInterval(actualizar,3000)
+    </script>
+</body>
+
+</html>

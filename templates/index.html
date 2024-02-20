@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Sensorized Network</title>
+    <meta name="description" content="Plataforma que permite simular partidos NBA para observar posibles cambios en rotaciones de cara al futuro.">
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i&amp;display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.css">
+    <link rel="stylesheet" href="static/css/vanilla-zoom.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
+        <div class="container"><a class="navbar-brand logo" href="#">RED SENSORIZADA WEB API</a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#">INICIO</a></li>
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        DATOS
+                      </a>
+                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <form action="/visualizar_datos" method="post">
+                              <li><input type="submit" class="dropdown-item" name="sensor" value="Acelerómetro"></li>
+                              <li><input type="submit" class="dropdown-item" name="sensor" value="Barómetro"></li>
+                              <li><input type="submit" class="dropdown-item" name="sensor" value="Giroscopio"></li>
+                              <li><input type="submit" class="dropdown-item" name="sensor" value="Magnetómetro"></li>
+                              <li><input type="submit" class="dropdown-item" name="sensor" value="Podómetro"></li>
+                              <li><hr class="dropdown-divider"></li>
+                              <li><input type="submit" class="dropdown-item" name="sensor" value="Todos"></li>
+                          </form>
+                      </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main class="page landing-page">
+        <section class="clean-block clean-hero" style="background-image: url(&quot;static/img/SensorizedNetwork.png&quot;);color: rgba(0,107,183,0.68);">
+            <div class="text">
+                <h2>Bienvenido a la Web API de una red sensorizada</h2>
+                <p>Esta plataforma te permite visualizar y procesar los datos capturados un dispositivo móvil en tiempo real.</p><button class="btn btn-outline-light btn-lg" type="button" onclick="window.location.href='/#porque';">Descargar</button>
+            </div>
+        </section>
+        <section class="clean-block clean-info dark">
+            <div class="container" id="porque">
+                <div class="block-heading">
+                    <h2 class="text-info">¿Por qué utilizarnos?</h2>
+                    <p>Nuestro dispositivo móvil es capaz de capturar una gran cantidad de datos que en nuestro día a día desconocemos o ignoramos, con el desarrollo de este proyecto somos capaces de obtener cualquier tipo de dato que capture y visualizar instantaneamente.</p>
+                </div>
+                <div class="row align-items-center">
+                    <div class="col-md-6"><img class="img-thumbnail" src="static/img/FuncionamientoRed.png"></div>
+                    <div class="col-md-6">
+                        <div>
+                            <h3>Los datos son un bien muy importante</h3>
+                            <div class="getting-started-info">
+                                <p>Ofrecemos la posibilidad de visualizar, coleccionar y extraer conclusiones de los datos que captura nuestro dispositivo en cualquier momento.</p>
+                            </div><button class="btn btn-outline-primary btn-lg" type="button" onclick="window.location.href='/elegir_equipos_futuro';">Datos</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="clean-block about-us">
+            <div class="container">
+                <div class="block-heading">
+                    <h2 class="text-info">Creadores</h2>
+                    <p>Somos Rubén, José y Pablo, estudiantes de la asignatura Sistemas empotrado y ubicuos, y este es nuestro proyecto de prácticas</p>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="card text-center clean-card"><img class="card-img-top w-100 d-block" src="static/img/avatars/miguelangel.JPG">
+                            <div class="card-body info">
+                                <h4 class="card-title">Rubén</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="card text-center clean-card"><img class="card-img-top w-100 d-block" src="static/img/avatars/pablo.JPG">
+                            <div class="card-body info">
+                                <h4 class="card-title">José</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="card text-center clean-card"><img class="card-img-top w-100 d-block" src="static/img/avatars/david.JPG">
+                            <div class="card-body info">
+                                <h4 class="card-title">Pablo</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="page-footer dark"></footer>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js"></script>
+    <script src="static/js/vanilla-zoom.js"></script>
+    <script src="static/js/theme.js"></script>
+</body>
+
+</html>
