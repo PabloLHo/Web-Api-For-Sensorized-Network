@@ -130,6 +130,12 @@
   right: 42.5%;
 }
 
+.dash-panel span:nth-child(11) {
+  font-size: 0.8em;
+  top: 80%;
+  right: 42.5%;
+}
+
 .dash {
   width: 5px;
   height: 70px;

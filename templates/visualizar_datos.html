@@ -59,7 +59,8 @@
     <main class="page">
 
         <div class="sensor">
-            <h2 class="titulo" style="text-align: center; margin: 3%;">{{ sensor }}</h2>
+            <h2 class="titulo" style="text-align: center; margin: 2%;">{{ sensor }}</h2>
+            <h4 id="encendido" style="text-align: center; color: red; margin-bottom: 2%">El sensor se encuentra apagado</h4>
             <div id="Acelerómetro" style="display: none">
                 <div class="row" style="margin: 1%; justify-content: center">
                     <div class="middle col">
@@ -74,6 +75,7 @@
                         <span>3.5</span>
                         <span>4</span>
                         <span>m/s <sup>2</sup></span>
+                        <span>Eje X</span>
                         <div id="dash" class="dash">
                         </div>
                       </div>
@@ -81,6 +83,56 @@
                     <div class="element-card col">
                         <div class="front-facing">
                             <h1 id="actual-Acelerómetro" class="abr">0</h1>
+                            <p class="title">m / s <sup>2</sup></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin: 1%; justify-content: center">
+                    <div class="middle col">
+                      <div class="dash-panel">
+                        <span>0</span>
+                        <span>0.5</span>
+                        <span>1</span>
+                        <span>1.5</span>
+                        <span>2</span>
+                        <span>2.5</span>
+                        <span>3</span>
+                        <span>3.5</span>
+                        <span>4</span>
+                        <span>m/s <sup>2</sup></span>
+                        <span>Eje Y</span>
+                        <div id="dash-y" class="dash">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="element-card col">
+                        <div class="front-facing">
+                            <h1 id="actual-Acelerómetro-y" class="abr">0</h1>
+                            <p class="title">m / s <sup>2</sup></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin: 1%; justify-content: center">
+                    <div class="middle col">
+                      <div class="dash-panel">
+                        <span>0</span>
+                        <span>0.5</span>
+                        <span>1</span>
+                        <span>1.5</span>
+                        <span>2</span>
+                        <span>2.5</span>
+                        <span>3</span>
+                        <span>3.5</span>
+                        <span>4</span>
+                        <span>m/s <sup>2</sup></span>
+                        <span>Eje Z</span>
+                        <div id="dash-z" class="dash">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="element-card col">
+                        <div class="front-facing">
+                            <h1 id="actual-Acelerómetro-z" class="abr">0</h1>
                             <p class="title">m / s <sup>2</sup></p>
                         </div>
                     </div>
@@ -111,39 +163,39 @@
                 <div class="row">
                     <div class="man">
 
-              <div class="arm front">
-                <div class="arm__top">
-                  <div class="arm__fore"></div>
-                </div>
-              </div>
+                      <div class="arm front">
+                        <div class="arm__top">
+                          <div class="arm__fore"></div>
+                        </div>
+                      </div>
 
-              <div class="arm back">
-                <div class="arm__top">
-                  <div class="arm__fore"></div>
-                </div>
-              </div>
+                      <div class="arm back">
+                        <div class="arm__top">
+                          <div class="arm__fore"></div>
+                        </div>
+                      </div>
 
-              <div class="head">
-                <div class="head__hair"></div>
-                <div class="head__ear"></div>
-                <div class="head__nose"></div>
-                <div class="head__eye"></div>
-              </div>
+                      <div class="head">
+                        <div class="head__hair"></div>
+                        <div class="head__ear"></div>
+                        <div class="head__nose"></div>
+                        <div class="head__eye"></div>
+                      </div>
 
-              <div class="body">
-                <div class="body__belly"></div>
-              </div>
-              <div class="pelvis"></div>
-              <div class="leg">
-                <div class="leg__top">
-                  <div class="leg__fore"></div>
-                </div>
-              </div>
-              <div class="leg back">
-                <div class="leg__top">
-                  <div class="leg__fore"></div>
-                </div>
-              </div>
+                      <div class="body">
+                        <div class="body__belly"></div>
+                      </div>
+                      <div class="pelvis"></div>
+                      <div class="leg">
+                        <div class="leg__top">
+                          <div class="leg__fore"></div>
+                        </div>
+                      </div>
+                      <div class="leg back">
+                        <div class="leg__top">
+                          <div class="leg__fore"></div>
+                        </div>
+                    </div>
                 </div>
                     <div class="element-card col">
                         <div class="front-facing">
@@ -186,6 +238,7 @@
     <script>
 
         var myChart;
+        var encendido = true;
 
         function inicializar(){
 
@@ -202,6 +255,8 @@
                 document.getElementById("{{sensor}}").style.display = "block";
 
             }
+
+            //sensor_encendido();
 
             const data2 = [];
             const fechas = []
@@ -262,19 +317,75 @@
         window.onload = inicializar;
 
         function actualizar(){
-            var numero = Math.random() * 4;
-            document.getElementById("actual-{{ sensor }}").innerHTML = numero.toFixed(2);
+            var numero_x = Math.random() * 4;
+            var numero_y = Math.random() * 4;
+            var numero_z = Math.random() * 4;
+            document.getElementById("actual-{{ sensor }}").innerHTML = numero_x.toFixed(2);
             myChart.config.data.labels.push(myChart.config.data.labels[myChart.config.data.labels.length - 1] + 1);
-            myChart.config.data.datasets[0].data.push(numero);
+            myChart.config.data.datasets[0].data.push(numero_x);
             myChart.update();
             if("{{ sensor }}" == "Acelerómetro"){
-                giro = 60 + numero * 57.5;
-                console.log(numero + " " + giro);
-                document.getElementById("dash").style.transform = "rotate(" + giro + "deg)"
+                giro_x = 60 + numero_x * 57.5;
+                giro_y = 60 + numero_y * 57.5;
+                giro_z = 60 + numero_z * 57.5;
+                document.getElementById("actual-{{ sensor }}-y").innerHTML = numero_y.toFixed(2);
+                document.getElementById("actual-{{ sensor }}-z").innerHTML = numero_z.toFixed(2);
+                document.getElementById("dash").style.transform = "rotate(" + giro_x + "deg)";
+                document.getElementById("dash-y").style.transform = "rotate(" + giro_y + "deg)"
+                document.getElementById("dash-z").style.transform = "rotate(" + giro_z + "deg)"
             }
         }
 
+        function obtenerDatos() {
+            if(encendido) {
+                $.ajax({
+                    url: '/obtener_datos',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    success: function (data) {
+                        actualizar(data)
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.error('Error:', errorThrown);
+                    }
+                });
+                document.getElementById("encendido").style.display = "none";
+            }else{
+                document.getElementById("encendido").style.display = "block";
+            }
+        }
+
+        function filtros(){
+            $.ajax({
+                url: '/filtrar_datos',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ argumento: "argumento" }),
+                success: function(data) {
+                    // Manejo de la respuesta
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.error('Error:', errorThrown);
+                }
+            });
+        }
+
+        function sensor_encendido(){
+            $.ajax({
+                url: '/comprobar_encendido',
+                type: 'POST',
+                contentType: 'application/json',
+                success: function(data) {
+                    encendido = data;
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.error('Error:', errorThrown);
+                }
+            });
+        }
+
         window.setInterval(actualizar,3000)
+        window.setInterval(sensor_encendido,15000)
     </script>
 </body>
 
