@@ -6,13 +6,13 @@
     <meta name="viewport" content="height=device-height, initial-scale=1.0, shrink-to-fit=no">
     <title>Sensorized Network</title>
     <meta name="description" content="Plataforma que permite simular partidos NBA para observar posibles cambios en rotaciones de cara al futuro.">
-    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i&amp;display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.css">
-    <link rel="stylesheet" href="static/css/vanilla-zoom.min.css">
+    <link rel="stylesheet" href="css/vanilla-zoom.min.css">
 
-    <link rel="stylesheet" href="static/css/andando.css">
-    <link rel="stylesheet" href="static/css/acelerador.css">
+    <link rel="stylesheet" href="css/andando.css">
+    <link rel="stylesheet" href="css/acelerador.css">
 </head>
 
 <style>
@@ -31,25 +31,21 @@
 
 <body>
     <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
-            <div class="container"><a class="navbar-brand logo" href="/">RED SENSORIZADA WEB API</a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="container"><a class="navbar-brand logo" href="index.html">RED SENSORIZADA WEB API</a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navcol-1">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html">INICIO</a></li>
                         <li class="nav-item dropdown">
-                          <a class="nav-link dropdown-toggle active" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle active" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             DATOS
-                          </a>
-                          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                              <form action="/visualizar_datos" method="post">
-                                  <li><input type="submit" class="dropdown-item" name="sensor" value="Acelerómetro"></li>
-                                  <li><input type="submit" class="dropdown-item" name="sensor" value="Barómetro"></li>
-                                  <li><input type="submit" class="dropdown-item" name="sensor" value="Giroscopio"></li>
-                                  <li><input type="submit" class="dropdown-item" name="sensor" value="Magnetómetro"></li>
-                                  <li><input type="submit" class="dropdown-item" name="sensor" value="Podómetro"></li>
-                                  <li><hr class="dropdown-divider"></li>
-                                  <li><input type="submit" class="dropdown-item" name="sensor" value="Todos"></li>
-                              </form>
-                          </ul>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="visualizar_datos.html?type=Acelerómetro">Acelerómetro</a></li>
+                                <li><a class="dropdown-item" href="visualizar_datos.html?type=Barómetro">Barómetro</a></li>
+                                <li><a class="dropdown-item" href="visualizar_datos.html?type=Giroscopio">Giroscopio</a></li>
+                                <li><a class="dropdown-item" href="visualizar_datos.html?type=Magnetómetro">Magnetómetro</a></li>
+                                <li><a class="dropdown-item" href="visualizar_datos.html?type=Podómetro">Podómetro</a></li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
@@ -59,81 +55,79 @@
     <main class="page">
 
         <div class="sensor">
-            <h2 class="titulo" style="text-align: center; margin: 2%;">{{ sensor }}</h2>
+            <h2 id="titulo" class="titulo" style="text-align: center; margin: 2%;"></h2>
             <h4 id="encendido" style="text-align: center; color: red; margin-bottom: 2%">El sensor se encuentra apagado</h4>
             <div id="Acelerómetro" style="display: none">
                 <div class="row" style="margin: 1%; justify-content: center">
                     <div class="middle col">
-                      <div class="dash-panel">
-                        <span>0</span>
-                        <span>0.5</span>
-                        <span>1</span>
-                        <span>1.5</span>
-                        <span>2</span>
-                        <span>2.5</span>
-                        <span>3</span>
-                        <span>3.5</span>
-                        <span>4</span>
-                        <span>m/s <sup>2</sup></span>
-                        <span>Eje X</span>
-                        <div id="dash" class="dash">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="element-card col">
-                        <div class="front-facing">
-                            <h1 id="actual-Acelerómetro" class="abr">0</h1>
-                            <p class="title">m / s <sup>2</sup></p>
+                        <div class="dash-panel">
+                            <span>0</span>
+                            <span>0.5</span>
+                            <span>1</span>
+                            <span>1.5</span>
+                            <span>2</span>
+                            <span>2.5</span>
+                            <span>3</span>
+                            <span>3.5</span>
+                            <span>4</span>
+                            <span>m/s <sup>2</sup></span>
+                            <span>Eje X</span>
+                            <div id="dash" class="dash">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row" style="margin: 1%; justify-content: center">
                     <div class="middle col">
-                      <div class="dash-panel">
-                        <span>0</span>
-                        <span>0.5</span>
-                        <span>1</span>
-                        <span>1.5</span>
-                        <span>2</span>
-                        <span>2.5</span>
-                        <span>3</span>
-                        <span>3.5</span>
-                        <span>4</span>
-                        <span>m/s <sup>2</sup></span>
-                        <span>Eje Y</span>
-                        <div id="dash-y" class="dash">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="element-card col">
-                        <div class="front-facing">
-                            <h1 id="actual-Acelerómetro-y" class="abr">0</h1>
-                            <p class="title">m / s <sup>2</sup></p>
+                        <div class="dash-panel">
+                            <span>0</span>
+                            <span>0.5</span>
+                            <span>1</span>
+                            <span>1.5</span>
+                            <span>2</span>
+                            <span>2.5</span>
+                            <span>3</span>
+                            <span>3.5</span>
+                            <span>4</span>
+                            <span>m/s <sup>2</sup></span>
+                            <span>Eje Y</span>
+                            <div id="dash-y" class="dash">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row" style="margin: 1%; justify-content: center">
                     <div class="middle col">
-                      <div class="dash-panel">
-                        <span>0</span>
-                        <span>0.5</span>
-                        <span>1</span>
-                        <span>1.5</span>
-                        <span>2</span>
-                        <span>2.5</span>
-                        <span>3</span>
-                        <span>3.5</span>
-                        <span>4</span>
-                        <span>m/s <sup>2</sup></span>
-                        <span>Eje Z</span>
-                        <div id="dash-z" class="dash">
+                        <div class="dash-panel">
+                            <span>0</span>
+                            <span>0.5</span>
+                            <span>1</span>
+                            <span>1.5</span>
+                            <span>2</span>
+                            <span>2.5</span>
+                            <span>3</span>
+                            <span>3.5</span>
+                            <span>4</span>
+                            <span>m/s <sup>2</sup></span>
+                            <span>Eje Z</span>
+                            <div id="dash-z" class="dash">
+                            </div>
                         </div>
-                      </div>
                     </div>
-                    <div class="element-card col">
-                        <div class="front-facing">
-                            <h1 id="actual-Acelerómetro-z" class="abr">0</h1>
-                            <p class="title">m / s <sup>2</sup></p>
+                    <div class="row" style="margin: 1%; justify-content: center">
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro-y" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro-z" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -229,20 +223,51 @@
     </main>
 
     <footer class="page-footer dark"></footer>
-    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js"></script>
-    <script src="static/js/vanilla-zoom.js"></script>
-    <script src="static/js/theme.js"></script>
+    <script src="js/vanilla-zoom.js"></script>
+    <script src="js/theme.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script>
 
         var myChart;
         var encendido = true;
+        var valor;
 
         function inicializar(){
 
-            if("{{ sensor }}" == "Todos"){
+            var remplaza = /\+/gi;
+            var url = window.location.href;
+            url = decodeURIComponent(url);
+            url = unescape(url);
+            url = url.replace(remplaza, " ");
+            url = url.toUpperCase();
+            variable = "type";
+            var variable_may = variable.toUpperCase();
+            var variable_pos = url.indexOf(variable_may);
+            if (variable_pos != -1){
+                var pos_separador = url.indexOf("&", variable_pos);
+                if (pos_separador != -1)
+                {
+                    valor = url.substring(variable_pos + variable_may.length + 1, pos_separador);
+                } else{
+                    valor = url.substring(variable_pos + variable_may.length + 1, url.length);
+                }
+            } else{
+                alert("NO_ENCONTRADO");
+            }
+
+            pagina = url.substring(0,url.indexOf("?"));
+            pagina = pagina.substring(pagina.lastIndexOf("/")+1, pagina.length).toLowerCase();
+            valor = valor.toLowerCase();
+            valor = valor.charAt(0).toUpperCase() + valor.slice(1);
+            console.log(valor);
+            if(valor.indexOf("#") != -1){
+                valor = valor.substring(0, valor.indexOf("#"));
+            }
+
+            if( valor == "Todos"){
 
                 document.getElementById("Acelerómetro").style.display = "block";
                 document.getElementById("Giroscopio").style.display = "block";
@@ -252,10 +277,11 @@
 
             }else {
 
-                document.getElementById("{{sensor}}").style.display = "block";
+                document.getElementById(valor).style.display = "block";
 
             }
 
+            document.getElementById("titulo").innerHTML = valor;
             //sensor_encendido();
 
             const data2 = [];
@@ -309,7 +335,7 @@
               },
             };
 
-            myChart = new Chart(document.getElementById("grafica-{{ sensor }}"), config);
+            myChart = new Chart(document.getElementById("grafica-" + valor), config);
             myChart.canvas.parentNode.style.width = '100%';
 
         }
@@ -320,72 +346,25 @@
             var numero_x = Math.random() * 4;
             var numero_y = Math.random() * 4;
             var numero_z = Math.random() * 4;
-            document.getElementById("actual-{{ sensor }}").innerHTML = numero_x.toFixed(2);
+            document.getElementById("actual-" + valor).innerHTML = numero_x.toFixed(2);
             myChart.config.data.labels.push(myChart.config.data.labels[myChart.config.data.labels.length - 1] + 1);
             myChart.config.data.datasets[0].data.push(numero_x);
             myChart.update();
-            if("{{ sensor }}" == "Acelerómetro"){
+            if(valor == "Acelerómetro"){
                 giro_x = 60 + numero_x * 57.5;
                 giro_y = 60 + numero_y * 57.5;
                 giro_z = 60 + numero_z * 57.5;
-                document.getElementById("actual-{{ sensor }}-y").innerHTML = numero_y.toFixed(2);
-                document.getElementById("actual-{{ sensor }}-z").innerHTML = numero_z.toFixed(2);
+                document.getElementById("actual-" + valor + "-y").innerHTML = numero_y.toFixed(2);
+                document.getElementById("actual-" + valor + "-z").innerHTML = numero_z.toFixed(2);
                 document.getElementById("dash").style.transform = "rotate(" + giro_x + "deg)";
                 document.getElementById("dash-y").style.transform = "rotate(" + giro_y + "deg)"
                 document.getElementById("dash-z").style.transform = "rotate(" + giro_z + "deg)"
             }
         }
 
-        function obtenerDatos() {
-            if(encendido) {
-                $.ajax({
-                    url: '/obtener_datos',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    success: function (data) {
-                        actualizar(data)
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        console.error('Error:', errorThrown);
-                    }
-                });
-                document.getElementById("encendido").style.display = "none";
-            }else{
-                document.getElementById("encendido").style.display = "block";
-            }
-        }
-
-        function filtros(){
-            $.ajax({
-                url: '/filtrar_datos',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ argumento: "argumento" }),
-                success: function(data) {
-                    // Manejo de la respuesta
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    console.error('Error:', errorThrown);
-                }
-            });
-        }
-
-        function sensor_encendido(){
-            $.ajax({
-                url: '/comprobar_encendido',
-                type: 'POST',
-                contentType: 'application/json',
-                success: function(data) {
-                    encendido = data;
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    console.error('Error:', errorThrown);
-                }
-            });
-        }
 
         window.setInterval(actualizar,3000)
-        window.setInterval(sensor_encendido,15000)
+
     </script>
 </body>
 

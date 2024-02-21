@@ -7,10 +7,18 @@
   color: #3d85ea;
   border-radius: 50%;
   position: relative;
-  display: block;
+  display: flex;
   overflow: hidden;
   background: radial-gradient(#3d85ea 10%, #ffffff 10%);
 }
+
+.middle {
+  display: flex;
+  width: 50%;
+  text-align: center;
+  justify-content: center;
+}
+
 .dash-panel span {
   font-size: 20px;
   font-style: italic;
@@ -132,8 +140,8 @@
 
 .dash-panel span:nth-child(11) {
   font-size: 0.8em;
-  top: 80%;
-  right: 42.5%;
+  top: 60%;
+  right: 43%;
 }
 
 .dash {
