@@ -150,7 +150,34 @@
                     </div>
                 </div>
             </div>
-            <div id="Barómetro" style="display: none"></div>
+            <div id="Barómetro" style="display: none">
+<!--                https://codepen.io/ptigurius/pen/oqOraM-->
+                <div id="chart_div" style="width: 400px; height: 120px;"></div>
+                <div class="element-card col">
+                    <div class="front-facing">
+                        <h1 id="actual-Barómetro" class="abr">0</h1>
+                        <p class="title">m / s <sup>2</sup></p>
+                    </div>
+                </div>
+                <div class="row" style="margin: 1%; justify-content: center">
+                    <div class="col-lg-9 col-xl-7">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary fw-bold m-0">Aceleración</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area"><canvas id="grafica-Barómetro"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div id="Giroscopio" style="display: none"></div>
             <div id="Magnetómetro" style="display: none"></div>
             <div id="Podómetro" style="display: none">
@@ -224,6 +251,7 @@
 
     <footer class="page-footer dark"></footer>
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js"></script>
     <script src="js/vanilla-zoom.js"></script>
     <script src="js/theme.js"></script>
@@ -365,6 +393,34 @@
 
         window.setInterval(actualizar,3000)
 
+    </script>
+
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['gauge']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Label', 'Value'],
+                ['Barómetro', 35],
+
+            ]);
+
+            var options = {
+                width: 400, height: 120,
+                redFrom: 87, redTo: 100,
+                yellowFrom:75, yellowTo: 87,
+                minorTicks: 5
+            };
+
+            var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+            chart.draw(data, options);
+
+
+
+        }
     </script>
 </body>
 
