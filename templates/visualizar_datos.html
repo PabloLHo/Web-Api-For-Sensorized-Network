@@ -6,13 +6,13 @@
     <meta name="viewport" content="height=device-height, initial-scale=1.0, shrink-to-fit=no">
     <title>Sensorized Network</title>
     <meta name="description" content="Plataforma que permite simular partidos NBA para observar posibles cambios en rotaciones de cara al futuro.">
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i&amp;display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.css">
-    <link rel="stylesheet" href="css/vanilla-zoom.min.css">
+    <link rel="stylesheet" href="static/css/vanilla-zoom.min.css">
 
-    <link rel="stylesheet" href="css/andando.css">
-    <link rel="stylesheet" href="css/acelerador.css">
+    <link rel="stylesheet" href="static/css/andando.css">
+    <link rel="stylesheet" href="static/css/acelerador.css">
 </head>
 
 <style>
@@ -55,7 +55,7 @@
     <main class="page">
 
         <div class="sensor">
-            <h2 id="titulo" class="titulo" style="text-align: center; margin: 2%;"></h2>
+            <h2 id="titulo" class="titulo" style="text-align: center; margin: 2%;">{{ sensor }}</h2>
             <h4 id="encendido" style="text-align: center; color: red; margin-bottom: 2%">El sensor se encuentra apagado</h4>
             <div id="Acelerómetro" style="display: none">
                 <div class="row" style="margin: 1%; justify-content: center">
@@ -250,68 +250,45 @@
     </main>
 
     <footer class="page-footer dark"></footer>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js"></script>
-    <script src="js/vanilla-zoom.js"></script>
-    <script src="js/theme.js"></script>
+    <script src="static/js/vanilla-zoom.js"></script>
+    <script src="static/js/theme.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script>
 
         var myChart;
         var encendido = true;
-        var valor;
+        var valor = {{ sensor }};
+        var sensores = ["Podómetro", "Batería", "Giroscopio", "Magnetómetro", "Acelerómetro", "Barómetro", "Proximidad", "Luminosidad", "GPS", "Termómetro", "Sensor de humedad"]
+        var actualizacion = []
+        window.onload = inicializar;
 
-        function inicializar(){
+        function inicializar() {
 
-            var remplaza = /\+/gi;
-            var url = window.location.href;
-            url = decodeURIComponent(url);
-            url = unescape(url);
-            url = url.replace(remplaza, " ");
-            url = url.toUpperCase();
-            variable = "type";
-            var variable_may = variable.toUpperCase();
-            var variable_pos = url.indexOf(variable_may);
-            if (variable_pos != -1){
-                var pos_separador = url.indexOf("&", variable_pos);
-                if (pos_separador != -1)
-                {
-                    valor = url.substring(variable_pos + variable_may.length + 1, pos_separador);
-                } else{
-                    valor = url.substring(variable_pos + variable_may.length + 1, url.length);
+            if (valor === "Todos") {
+
+                for (var i = 0; i < sensores.length; i++) {
+                    document.getElementById(sensores[i]).style.display = "block";
+                    window["Inicializar" + sensores[i]];
+                    crearGrafica(sensores[i]);
+                    window.setInterval(actualizar,actualizacion[i]);
                 }
-            } else{
-                alert("NO_ENCONTRADO");
-            }
 
-            pagina = url.substring(0,url.indexOf("?"));
-            pagina = pagina.substring(pagina.lastIndexOf("/")+1, pagina.length).toLowerCase();
-            valor = valor.toLowerCase();
-            valor = valor.charAt(0).toUpperCase() + valor.slice(1);
-            console.log(valor);
-            if(valor.indexOf("#") != -1){
-                valor = valor.substring(0, valor.indexOf("#"));
-            }
-
-            if( valor == "Todos"){
-
-                document.getElementById("Acelerómetro").style.display = "block";
-                document.getElementById("Giroscopio").style.display = "block";
-                document.getElementById("Podómetro").style.display = "block";
-                document.getElementById("Magnetómetro").style.display = "block";
-                document.getElementById("Barómetro").style.display = "block";
-
-            }else {
+            } else {
 
                 document.getElementById(valor).style.display = "block";
+                window["Inicializar" + valor];
+                crearGrafica(valor);
+                window.setInterval(actualizar,3000);
 
             }
 
-            document.getElementById("titulo").innerHTML = valor;
-            //sensor_encendido();
+        }
 
+        function crearGrafica(sensor){
             const data2 = [];
             const fechas = []
             for (var i = 0; i < 1; i++) {
@@ -325,7 +302,7 @@
             const data = {
                 labels: fechas,
                 datasets: [{
-                    label: "Aceleración",
+                    label: sensor,
                     backgroundColor: 'rgb(' + r + ',' + g + ',' + b +')',
                     borderColor: 'rgb(' + r + ',' + g + ',' + b +')',
                     data: data2,
@@ -341,8 +318,7 @@
                     type: "time",
                     title: {
                         display: true,
-
-                      text: 'Fecha recogida de datos'
+                        text: 'Fecha recogida de datos'
                     },
                     time: {
                         unit: 'month',
@@ -363,22 +339,20 @@
               },
             };
 
-            myChart = new Chart(document.getElementById("grafica-" + valor), config);
+            myChart = new Chart(document.getElementById("grafica-" + sensor), config);
             myChart.canvas.parentNode.style.width = '100%';
 
         }
 
-        window.onload = inicializar;
-
-        function actualizar(){
+        function actualizar(sensor){
             var numero_x = Math.random() * 4;
             var numero_y = Math.random() * 4;
             var numero_z = Math.random() * 4;
-            document.getElementById("actual-" + valor).innerHTML = numero_x.toFixed(2);
+            document.getElementById("actual-" + sensor).innerHTML = numero_x.toFixed(2);
             myChart.config.data.labels.push(myChart.config.data.labels[myChart.config.data.labels.length - 1] + 1);
             myChart.config.data.datasets[0].data.push(numero_x);
             myChart.update();
-            if(valor == "Acelerómetro"){
+            if(valor === "Acelerómetro"){
                 giro_x = 60 + numero_x * 57.5;
                 giro_y = 60 + numero_y * 57.5;
                 giro_z = 60 + numero_z * 57.5;
@@ -389,9 +363,6 @@
                 document.getElementById("dash-z").style.transform = "rotate(" + giro_z + "deg)"
             }
         }
-
-
-        window.setInterval(actualizar,3000)
 
     </script>
 
