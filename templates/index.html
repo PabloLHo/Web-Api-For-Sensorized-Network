@@ -19,16 +19,22 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link active" href="#">INICIO</a></li>
                     <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        DATOS
-                      </a>
-                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <li><a class="dropdown-item" href="visualizar_datos.html?type=Acelerómetro">Acelerómetro</a></li>
-                          <li><a class="dropdown-item" href="visualizar_datos.html?type=Barómetro">Barómetro</a></li>
-                          <li><a class="dropdown-item" href="visualizar_datos.html?type=Giroscopio">Giroscopio</a></li>
-                          <li><a class="dropdown-item" href="visualizar_datos.html?type=Magnetómetro">Magnetómetro</a></li>
-                          <li><a class="dropdown-item" href="visualizar_datos.html?type=Podómetro">Podómetro</a></li>
-                      </ul>
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            DATOS
+                        </a>
+                        <form action="/visualizar_datos" method="post">
+                            <li><input type="submit" class="dropdown-item" name="sensor" value="Acelerómetro"></li>
+                            <li><input type="submit" class="dropdown-item" name="sensor" value="Temperatura"></li>
+                            <li><input type="submit" class="dropdown-item" name="sensor" value="Giroscopio"></li>
+                            <li><input type="submit" class="dropdown-item" name="sensor" value="Magnetómetro"></li>
+                            <li><input type="submit" class="dropdown-item" name="sensor" value="Podómetro"></li>
+                            <li><input type="submit" class="dropdown-item" name="sensor" value="Batería"></li>
+                            <li><input type="submit" class="dropdown-item" name="sensor" value="Proximidad"></li>
+                            <li><input type="submit" class="dropdown-item" name="sensor" value="Luminosidad"></li>
+                            <li><input type="submit" class="dropdown-item" name="sensor" value="GPS"></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><input type="submit" class="dropdown-item" name="sensor" value="Todos"></li>
+                        </form>
                     </li>
                 </ul>
             </div>

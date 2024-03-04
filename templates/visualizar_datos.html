@@ -34,18 +34,24 @@
             <div class="container"><a class="navbar-brand logo" href="index.html">RED SENSORIZADA WEB API</a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navcol-1">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="index.html">INICIO</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">INICIO</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle active" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             DATOS
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="visualizar_datos.html?type=Acelerómetro">Acelerómetro</a></li>
-                                <li><a class="dropdown-item" href="visualizar_datos.html?type=Barómetro">Barómetro</a></li>
-                                <li><a class="dropdown-item" href="visualizar_datos.html?type=Giroscopio">Giroscopio</a></li>
-                                <li><a class="dropdown-item" href="visualizar_datos.html?type=Magnetómetro">Magnetómetro</a></li>
-                                <li><a class="dropdown-item" href="visualizar_datos.html?type=Podómetro">Podómetro</a></li>
-                            </ul>
+                            <form action="/visualizar_datos" method="post">
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Acelerómetro"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Temperatura"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Giroscopio"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Magnetómetro"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Podómetro"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Batería"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Proximidad"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Luminosidad"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="GPS"></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Todos"></li>
+                            </form>
                         </li>
                     </ul>
                 </div>
@@ -150,7 +156,7 @@
                     </div>
                 </div>
             </div>
-            <div id="Barómetro" style="display: none">
+            <div id="Temperatura" style="display: none">
 <!--                https://codepen.io/ptigurius/pen/oqOraM-->
                 <div id="chart_div" style="width: 400px; height: 120px;"></div>
                 <div class="element-card col">
@@ -178,8 +184,86 @@
                     </div>
                 </div>
             </div>
-            <div id="Giroscopio" style="display: none"></div>
-            <div id="Magnetómetro" style="display: none"></div>
+            <div id="Giroscopio" style="display: none">
+                <div class="row" style="margin: 1%; justify-content: center">
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro-y" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro-z" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                    </div>
+                <div class="row" style="margin: 1%; justify-content: center">
+                    <div class="col-lg-9 col-xl-7">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary fw-bold m-0">Aceleración</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area"><canvas id="grafica-Barómetro"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="Magnetómetro" style="display: none">
+                <div class="row" style="margin: 1%; justify-content: center">
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro-y" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro-z" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                    </div>
+                <div class="row" style="margin: 1%; justify-content: center">
+                    <div class="col-lg-9 col-xl-7">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary fw-bold m-0">Aceleración</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area"><canvas id="grafica-Barómetro"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div id="Podómetro" style="display: none">
                 <div class="row">
                     <div class="man">
@@ -245,6 +329,168 @@
                 </div>
             {# https://codepen.io/kylewetton/pen/yqWMOP #}
             </div>
+            <div id="Batería" style="display: none">
+<!--                https://codepen.io/ptigurius/pen/oqOraM-->
+                <div class="row" style="margin: 1%; justify-content: center">
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro-y" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro-z" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                    </div>
+                <div class="row" style="margin: 1%; justify-content: center">
+                    <div class="col-lg-9 col-xl-7">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary fw-bold m-0">Aceleración</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area"><canvas id="grafica-Barómetro"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="Proximidad" style="display: none">
+                <div class="row" style="margin: 1%; justify-content: center">
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro-y" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro-z" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                    </div>
+                <div class="row" style="margin: 1%; justify-content: center">
+                    <div class="col-lg-9 col-xl-7">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary fw-bold m-0">Aceleración</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area"><canvas id="grafica-Barómetro"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="Luminosidad" style="display: none">
+                <div class="row" style="margin: 1%; justify-content: center">
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro-y" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro-z" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                    </div>
+                <div class="row" style="margin: 1%; justify-content: center">
+                    <div class="col-lg-9 col-xl-7">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary fw-bold m-0">Aceleración</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area"><canvas id="grafica-Barómetro"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="GPS" style="display: none">
+                <div class="row" style="margin: 1%; justify-content: center">
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro-y" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                        <div class="element-card col">
+                            <div class="front-facing">
+                                <h1 id="actual-Acelerómetro-z" class="abr">0</h1>
+                                <p class="title">m / s <sup>2</sup></p>
+                            </div>
+                        </div>
+                    </div>
+                <div class="row" style="margin: 1%; justify-content: center">
+                    <div class="col-lg-9 col-xl-7">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary fw-bold m-0">Aceleración</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area"><canvas id="grafica-Barómetro"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
     </main>
