@@ -25,7 +25,8 @@ def elegir_futuro():
     global sensor
     if request.method == 'POST':
         sensor = request.form['sensor']
-        return render_template('visualizar_datos.html', sensor=sensor)
+        sensores = []
+        return render_template('visualizar_datos.html', sensor=sensor, sensoresEncendidos=sensores)
 
 
 @app.route('/baterias', methods=['POST','GET'])
