@@ -1,0 +1,19 @@
+.map {
+	height: 400px;
+	width: 95%;
+	margin: auto;
+}
+
+.mousePosition {
+	position: absolute;
+	top: auto;
+	right: auto;
+	bottom: 5px;
+	left:50%;
+	transform: translateX(-50%);
+	border: 1px solid grey;
+	border-radius: 10px;
+	padding:5px;
+	background-color: rgba(225,225,225,0.6);
+	font-size: 100%;
+}

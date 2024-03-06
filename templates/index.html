@@ -22,19 +22,21 @@
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             DATOS
                         </a>
-                        <form action="/visualizar_datos" method="post">
-                            <li><input type="submit" class="dropdown-item" name="sensor" value="Acelerómetro"></li>
-                            <li><input type="submit" class="dropdown-item" name="sensor" value="Temperatura"></li>
-                            <li><input type="submit" class="dropdown-item" name="sensor" value="Giroscopio"></li>
-                            <li><input type="submit" class="dropdown-item" name="sensor" value="Magnetómetro"></li>
-                            <li><input type="submit" class="dropdown-item" name="sensor" value="Podómetro"></li>
-                            <li><input type="submit" class="dropdown-item" name="sensor" value="Batería"></li>
-                            <li><input type="submit" class="dropdown-item" name="sensor" value="Proximidad"></li>
-                            <li><input type="submit" class="dropdown-item" name="sensor" value="Luminosidad"></li>
-                            <li><input type="submit" class="dropdown-item" name="sensor" value="GPS"></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><input type="submit" class="dropdown-item" name="sensor" value="Todos"></li>
-                        </form>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <form action="/visualizar_datos" method="post">
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Acelerómetro"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Temperatura"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Giroscopio"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Magnetómetro"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Podómetro"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Batería"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Proximidad"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Luminosidad"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="GPS"></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><input type="submit" class="dropdown-item" name="sensor" value="Todos"></li>
+                            </form>
+                        </ul>
                     </li>
                 </ul>
             </div>
@@ -60,7 +62,11 @@
                             <h3>Los datos son un bien muy importante</h3>
                             <div class="getting-started-info">
                                 <p>Ofrecemos la posibilidad de visualizar, coleccionar y extraer conclusiones de los datos que captura nuestro dispositivo en cualquier momento.</p>
-                            </div><button class="btn btn-outline-primary btn-lg" type="button" onclick="window.location.href='/elegir_equipos_futuro';">Datos</button>
+                            </div>
+                            <form action="/visualizar_datos" method="post">
+                                <input type="hidden" name="sensor" value="Todos">
+                                <input class="btn btn-outline-primary btn-lg" type="submit" value="Datos">
+                            </form>
                         </div>
                     </div>
                 </div>

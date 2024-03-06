@@ -1,0 +1,139 @@
+*{
+   box-sizing: border-box;
+}
+
+
+.total-x{
+    justify-content: center;
+	display: flex;
+    align-items: center;
+    transform: rotateX(120deg);
+}
+
+.total-y{
+    justify-content: center;
+	display: flex;
+    align-items: center;
+    transform: rotateY(120deg);
+}
+
+.total-z{
+    justify-content: center;
+	display: flex;
+    align-items: center;
+    transform: rotateZ(45deg);
+}
+
+.pelicula{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 11px;
+    background: rgb(2,0,36);
+    background: linear-gradient(162deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+    border: 4px solid black;
+}
+
+.trasera{
+     display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 11px;
+    background: black;
+    border: 4px solid black;
+}
+
+.celular {
+    margin: 0px;
+    width: 149px;
+    padding: 1px;
+    height: 260px;
+    border-radius: 15px;
+    animation: mov 1s;}
+.topo{
+    display: flex;
+    width: 100%;
+    height: 15px;
+    border-top-right-radius: 11px;
+    border-top-left-radius: 11px;}
+.camera{
+    width: 30px;
+    height: 15px;
+    background-color: white;
+    border-bottom-right-radius: 50px;
+    border-bottom-left-radius: 50px;
+    margin-left: 57px;}
+.cameraL{
+    width: 10px;
+    margin-top: 2px;
+    height: 10px;
+    background-color: rgba(0, 0, 0, 0.623);
+    border: 2px solid black;
+    border-radius: 100%;
+    margin-left: 10px;}
+
+.linha{
+    display: flex;
+    align-items: flex-end;
+    margin-left: 5px;
+    justify-items: center;
+    margin-bottom: 3px;
+    margin-top: 15px;}
+.opera1{
+    width: 2px;
+    height: 2px;
+    margin-left: 1px;
+    background-color: white;
+    border-radius: 11px;}
+.opera2{
+    width: 2px;
+    height: 4px;
+    background-color: white;
+    margin-left: 1px;
+    border-radius: 11px;}
+.opera3{
+    width: 2px;
+    height: 6px;
+    background-color: white;
+    margin-left: 1px;
+    border-radius: 11px;}
+.opera4{
+    width: 2px;
+    height: 8px;
+    background-color: white;
+    margin-left: 1px;
+    border-radius: 11px;}
+.opera5{
+    width: 2px;
+    height: 10px;
+    background-color: white;
+    margin-left: 1px;
+    border-radius: 11px;}
+
+.bat{
+    width: 20px;
+    height: 10px;
+    margin-top: 5px;
+    margin-left: 5px;
+    border: 2px  solid rgba(0, 0, 0, 0.322);
+    border-radius: 10px;
+    background-color: white;
+}
+
+.volumeU{
+    width: 3px;
+    height: 50px;
+    margin-bottom: 130px;
+    border-top-right-radius: 11px;
+    border-bottom-right-radius: 11px;
+    background-color: black;}
+
+.volumeD{
+    width: 3px;
+    height: 20px;
+    margin-top: 60px;
+    border-top-right-radius: 11px;
+    border-bottom-right-radius: 11px;
+    background-color: black;}

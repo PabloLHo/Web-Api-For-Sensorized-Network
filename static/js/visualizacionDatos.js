@@ -3,14 +3,19 @@ var valor;
 var sensores = ["Podómetro", "Batería", "Giroscopio", "Magnetómetro", "Acelerómetro", "Proximidad", "Luminosidad", "GPS", "Temperatura"]
 var actualizacion = [0,120,30,60,15,15,30,90,600]
 
-window.onload = onload;
-
 function onload() {
 
     valor = sensor;
+    if(sensoresEncendidos.length == 0)
+        document.getElementById("encendido").style.color = "red";
+    document.getElementById("encendido").innerHTML = sensoresEncendidos.length + " sensores se encuentran encendidos";
+
+    if(valor === "Batería")
+        document.getElementById("indicadorBateria").style.display = "none";
 
     if (valor === "Todos") {
 
+        document.getElementById("titulo").innerHTML = "Todos los sensores";
         for (var i = 0; i < sensores.length; i++) {
             document.getElementById(sensores[i]).style.display = "block";
             sensorST = sensores[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -23,11 +28,14 @@ function onload() {
 
         document.getElementById(valor).style.display = "block";
         sensorST = valor.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        inicializar(valor);
-        crearGrafica(sensorST);
+        //inicializar(valor);
+        crearGrafica(valor);
         window.setInterval(window["actualizar" + sensorST],3000);
 
     }
+
+    if(valor === "GPS")
+        crearMapa();
 
 }
 
@@ -36,6 +44,7 @@ function inicializar(s){
             url: '/' + s,
             type: 'GET',
             success: function(data) {
+                document.getElementById("actual-" + s).innerHTML = "0";
                 console.log("correcto");
             },
             error: function(error) {

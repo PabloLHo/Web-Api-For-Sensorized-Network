@@ -1,0 +1,81 @@
+:root{
+  --carga: 100%;
+  --color-carga: lime;
+  --color-borde: black;
+  --color-bateria: white;
+  --ancho-bateria: 15em;
+  --alto-bateria: 5em;
+  --ancho-bateria-min: 7em;
+  --alto-bateria-min: 2em;
+}
+
+.bateria{
+  width: var(--ancho-bateria);
+  height: var(--alto-bateria);
+  background-color: var(--color-bateria);
+  border-radius: 1em;
+  padding: 1em;
+  position: relative;
+  border: var(--color-carga) 1em solid;
+}
+
+.bateria::before{
+  content: '100%';
+  display: block;
+  position: absolute;
+  top: 0.5em;
+  left: 0.5em;
+  width: calc(var(--carga) - 1em);
+  height: calc(100% - 1em);
+  background-color: var(--color-carga);
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.bateria::after{
+  content: '';
+  position: absolute;
+  display: block;
+  top: 0.5em;
+  width: 1em;
+  height: 2em;
+  border-radius: 0.5em;
+  background: var(--color-carga);
+  left: 105%;
+}
+
+/*Batería pequeña para el resto de sensores*/
+
+.bateria-min{
+  width: var(--ancho-bateria-min);
+  height: var(--alto-bateria-min);
+  background-color: var(--color-bateria);
+  border-radius: 1em;
+  padding: 1em;
+  position: relative;
+  border: var(--color-carga) 0.5em solid;
+}
+
+.bateria-min::before{
+  display: block;
+  position: absolute;
+  top: 0.25em;
+  left: 0.25em;
+  width: calc(var(--carga) - 0.5em);
+  height: calc(100% - 0.5em);
+  background-color: var(--color-carga);
+  content: "100%";
+  font-weight: bold;
+}
+
+.bateria-min::after{
+  content: '';
+  position: absolute;
+  display: block;
+  top: 0.5em;
+  width: 0.5em;
+  height: 1em;
+  border-radius: 0.25em;
+  background: var(--color-carga);
+  left: 105%;
+}

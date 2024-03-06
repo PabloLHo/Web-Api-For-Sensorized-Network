@@ -3,6 +3,7 @@ from flask_cors import CORS
 from faunadb import query as q
 from faunadb.client import FaunaClient
 from Models.sensor import Sensor
+import json
 
 fauna_client = FaunaClient(secret="fnAE-czWhAAAzJpuciEYP-P-UZlSDIp4blaPP4KT")
 

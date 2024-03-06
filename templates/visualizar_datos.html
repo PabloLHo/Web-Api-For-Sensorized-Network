@@ -9,10 +9,25 @@
     <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i&amp;display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.css">
+
     <link rel="stylesheet" href="static/css/vanilla-zoom.min.css">
+    <link rel="stylesheet" href="static/css/bateria.css">
+
 
     <link rel="stylesheet" href="static/css/andando.css">
     <link rel="stylesheet" href="static/css/acelerador.css">
+    <link rel="stylesheet" href="static/css/telefono.css">
+
+    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="static/js/ol-ext/ol-ext.css" media="all">
+    <link rel="stylesheet" href="static/css/mapa.css">
+    <link rel="stylesheet" href="static/css/ol-layerswitcher.css" type="text/css">
+
+    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+    <script src="static/js/ol-ext/ol-ext.js"></script>
+    <script src="static/js/ol-layerswitcher.js"></script>
+
+
 </head>
 
 <style>
@@ -24,34 +39,36 @@
     }
 
     .titulo {
-	text-shadow: 17px -20px 1px #3d85ea
-}
+        text-shadow: 17px -20px 1px #3d85ea
+    }
 
 </style>
 
 <body>
     <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
-            <div class="container"><a class="navbar-brand logo" href="index.html">RED SENSORIZADA WEB API</a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="container"><a class="navbar-brand logo" href="/">RED SENSORIZADA WEB API</a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navcol-1">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="#">INICIO</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle active" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             DATOS
                             </a>
-                            <form action="/visualizar_datos" method="post">
-                                <li><input type="submit" class="dropdown-item" name="sensor" value="Acelerómetro"></li>
-                                <li><input type="submit" class="dropdown-item" name="sensor" value="Temperatura"></li>
-                                <li><input type="submit" class="dropdown-item" name="sensor" value="Giroscopio"></li>
-                                <li><input type="submit" class="dropdown-item" name="sensor" value="Magnetómetro"></li>
-                                <li><input type="submit" class="dropdown-item" name="sensor" value="Podómetro"></li>
-                                <li><input type="submit" class="dropdown-item" name="sensor" value="Batería"></li>
-                                <li><input type="submit" class="dropdown-item" name="sensor" value="Proximidad"></li>
-                                <li><input type="submit" class="dropdown-item" name="sensor" value="Luminosidad"></li>
-                                <li><input type="submit" class="dropdown-item" name="sensor" value="GPS"></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><input type="submit" class="dropdown-item" name="sensor" value="Todos"></li>
-                            </form>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <form action="/visualizar_datos" method="post">
+                                    <li><input type="submit" class="dropdown-item" name="sensor" value="Acelerómetro"></li>
+                                    <li><input type="submit" class="dropdown-item" name="sensor" value="Temperatura"></li>
+                                    <li><input type="submit" class="dropdown-item" name="sensor" value="Giroscopio"></li>
+                                    <li><input type="submit" class="dropdown-item" name="sensor" value="Magnetómetro"></li>
+                                    <li><input type="submit" class="dropdown-item" name="sensor" value="Podómetro"></li>
+                                    <li><input type="submit" class="dropdown-item" name="sensor" value="Batería"></li>
+                                    <li><input type="submit" class="dropdown-item" name="sensor" value="Proximidad"></li>
+                                    <li><input type="submit" class="dropdown-item" name="sensor" value="Luminosidad"></li>
+                                    <li><input type="submit" class="dropdown-item" name="sensor" value="GPS"></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><input type="submit" class="dropdown-item" name="sensor" value="Todos"></li>
+                                </form>
+                            </ul>
                         </li>
                     </ul>
                 </div>
@@ -59,38 +76,11 @@
     </nav>
 
     <main class="page">
+
         <div class="sensor">
             <h2 id="titulo" class="titulo" style="text-align: center; margin: 2%;">{{ sensor }}</h2>
-            <h4 id="encendido" style="text-align: center; color: red; margin-bottom: 2%">{{ len(sensoresEncendidos) }} se encuentran encendidos</h4>
-            <div id="Batería" style="display: none">
-<!--                https://codepen.io/ptigurius/pen/oqOraM-->
-                <div class="row" style="margin: 1%; justify-content: center">
-                    <div class="element-card col">
-                        <div class="front-facing">
-                            <h1 id="actual-Batería" class="abr">0</h1>
-                            <p class="title">m / s <sup>2</sup></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" style="margin: 1%; justify-content: center">
-                    <div class="col-lg-9 col-xl-7">
-                        <div class="card shadow mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-primary fw-bold m-0">Batería</h6>
-                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
-                                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
-                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-area"><canvas id="grafica-Batería"></canvas></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div id="indicadorBateria" class="bateria-min"></div>
+            <h4 id="encendido" style="text-align: center; color: green; margin-bottom: 2%"></h4>
             <div id="Acelerómetro" style="display: none">
                 <div class="row" style="margin: 1%; justify-content: center">
                     <div class="middle col">
@@ -185,25 +175,30 @@
                 </div>
             </div>
             <div id="Temperatura" style="display: none">
-                <!--https://codepen.io/ptigurius/pen/oqOraM-->
-                <div id="chart_div" style="width: 400px; height: 120px;"></div>
+                <div class="row" style="margin: 1%; justify-content: center">
+                    <div class="col" id="chart_div" style="display: flex; justify-content: center"></div>
+                    <div class="col">
+
+                    </div>
+                    <div class="col"></div>
+                </div>
                 <div class="row" style="margin: 1%; justify-content: center">
                     <div class="element-card col">
                         <div class="front-facing">
                             <h1 id="actual-Barómetro" class="abr">0</h1>
-                            <p class="title">m / s <sup>2</sup></p>
+                            <p class="title">Hectopascales</p>
                         </div>
                     </div>
                     <div class="element-card col">
                         <div class="front-facing">
                             <h1 id="actual-Temperatura" class="abr">0</h1>
-                            <p class="title">m / s <sup>2</sup></p>
+                            <p class="title">ºC</p>
                         </div>
                     </div>
                     <div class="element-card col">
                         <div class="front-facing">
                             <h1 id="actual-Humedad" class="abr">0</h1>
-                            <p class="title">m / s <sup>2</sup></p>
+                            <p class="title">%</p>
                         </div>
                     </div>
                 </div>
@@ -226,12 +221,124 @@
                     </div>
                 </div>
             </div>
+            <div id="Batería" style="display: none">
+                <div class="row" style="margin: 1%; justify-content: center">
+                    <div id="indicadorBateria" class="bateria"></div>
+                </div>
+                <div class="row" style="margin: 1%; justify-content: center">
+                    <div class="col-lg-9 col-xl-7">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary fw-bold m-0">Batería</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area"><canvas id="grafica-Batería"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div id="Giroscopio" style="display: none">
+                <div class="row" style="margin: 1%; justify-content: center">
+                    <div class="total-x col">
+                        <div class="celular">
+                            <div class="pelicula">
+                                <header class="topo">
+                                    <div class="camera">
+                                         <div class="cameraL">
+                                             <div class="flash"></div>
+                                         </div>
+                                        </div>
+                                    <div class="linha">
+                                        <div class="opera1"></div>
+                                        <div class="opera2"></div>
+                                        <div class="opera3"></div>
+                                        <div class="opera4"></div>
+                                        <div class="opera5"></div>
+
+                                    </div>
+                                    <div class="bat"></div>
+                                </header>
+                            </div>
+                        </div>
+                        <div class="volumeU">
+                        <div class="volumeD"></div>
+                        </div>
+                    </div>
+                    <div class="total-y col">
+                        <div class="celular">
+                            <div class="pelicula">
+                                <header class="topo">
+                                    <div class="camera">
+                                         <div class="cameraL">
+                                             <div class="flash"></div>
+                                         </div>
+                                        </div>
+                                    <div class="linha">
+                                        <div class="opera1"></div>
+                                        <div class="opera2"></div>
+                                        <div class="opera3"></div>
+                                        <div class="opera4"></div>
+                                        <div class="opera5"></div>
+
+                                    </div>
+                                    <div class="bat"></div>
+                                </header>
+                            </div>
+                        </div>
+                        <div class="volumeU">
+                        <div class="volumeD"></div>
+                        </div>
+                    </div>
+                    <div class="total-z col">
+                        <div class="celular">
+                            <div class="pelicula">
+                                <header class="topo">
+                                    <div class="camera">
+                                         <div class="cameraL">
+                                             <div class="flash"></div>
+                                         </div>
+                                        </div>
+                                    <div class="linha">
+                                        <div class="opera1"></div>
+                                        <div class="opera2"></div>
+                                        <div class="opera3"></div>
+                                        <div class="opera4"></div>
+                                        <div class="opera5"></div>
+
+                                    </div>
+                                    <div class="bat"></div>
+                                </header>
+                            </div>
+                        </div>
+                        <div class="volumeU">
+                        <div class="volumeD"></div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row" style="margin: 1%; justify-content: center">
                     <div class="element-card col">
                         <div class="front-facing">
                             <h1 id="actual-Giroscopio" class="abr">0</h1>
-                            <p class="title">m / s <sup>2</sup></p>
+                            <p class="title">Radianes / s</p>
+                        </div>
+                    </div>
+                    <div class="element-card col">
+                        <div class="front-facing">
+                            <h1 id="actual-Giroscopio" class="abr">0</h1>
+                            <p class="title">Radianes / s</p>
+                        </div>
+                    </div>
+                    <div class="element-card col">
+                        <div class="front-facing">
+                            <h1 id="actual-Giroscopio" class="abr">0</h1>
+                            <p class="title">Radianes / s</p>
                         </div>
                     </div>
                 </div>
@@ -259,7 +366,19 @@
                     <div class="element-card col">
                         <div class="front-facing">
                             <h1 id="actual-Magnetómetro" class="abr">0</h1>
-                            <p class="title">m / s <sup>2</sup></p>
+                            <p class="title">&microT</p>
+                        </div>
+                    </div>
+                    <div class="element-card col">
+                        <div class="front-facing">
+                            <h1 id="actual-Magnetómetro" class="abr">0</h1>
+                            <p class="title">&microT</p>
+                        </div>
+                    </div>
+                    <div class="element-card col">
+                        <div class="front-facing">
+                            <h1 id="actual-Magnetómetro" class="abr">0</h1>
+                            <p class="title">&microT</p>
                         </div>
                     </div>
                 </div>
@@ -322,8 +441,8 @@
                 </div>
                     <div class="element-card col">
                         <div class="front-facing">
-                            <h1 id="actual-Podómetro" class="abr">8.27</h1>
-                            <p class="title">m / s <sup>2</sup></p>
+                            <h1 id="actual-Podómetro" class="abr">0</h1>
+                            <p class="title">Pasos</p>
                         </div>
                     </div>
                 </div>
@@ -345,14 +464,13 @@
                         </div>
                     </div>
                 </div>
-            {# https://codepen.io/kylewetton/pen/yqWMOP #}
             </div>
             <div id="Proximidad" style="display: none">
                 <div class="row" style="margin: 1%; justify-content: center">
                     <div class="element-card col">
                         <div class="front-facing">
                             <h1 id="actual-Proximidad" class="abr">0</h1>
-                            <p class="title">m / s <sup>2</sup></p>
+                            <p class="title">cm</p>
                         </div>
                     </div>
                     </div>
@@ -380,7 +498,7 @@
                     <div class="element-card col">
                         <div class="front-facing">
                             <h1 id="actual-Luminosidad" class="abr">0</h1>
-                            <p class="title">m / s <sup>2</sup></p>
+                            <p class="title">lúmenes</p>
                         </div>
                     </div>
                 </div>
@@ -405,10 +523,26 @@
             </div>
             <div id="GPS" style="display: none">
                 <div class="row" style="margin: 1%; justify-content: center">
+                    <div id="map" class="map"></div>
+                    <script type="text/javascript" src="static/js/mapa.js"></script>
+                </div>
+                <div class="row" style="margin: 1%; justify-content: center">
                     <div class="element-card col">
                         <div class="front-facing">
                             <h1 id="actual-GPS" class="abr">0</h1>
-                            <p class="title">m / s <sup>2</sup></p>
+                            <p class="title">Latitud</p>
+                        </div>
+                    </div>
+                    <div class="element-card col">
+                        <div class="front-facing">
+                            <h1 id="actual-GPS" class="abr">0</h1>
+                            <p class="title">Longitud</p>
+                        </div>
+                    </div>
+                    <div class="element-card col">
+                        <div class="front-facing">
+                            <h1 id="actual-GPS" class="abr">0</h1>
+                            <p class="title">Altitud</p>
                         </div>
                     </div>
                 </div>
@@ -436,15 +570,25 @@
     </main>
 
     <footer class="page-footer dark"></footer>
+
     <script src="static/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js"></script>
     <script src="static/js/vanilla-zoom.js"></script>
     <script src="static/js/theme.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-    <script src="static/js/visualizacionDatos">
-        var sensor = {{ sensor }};
+    <script src="static/js/jquery-6.0.0-min.js"></script>
+    <script src="static/js/visualizacionDatos.js"></script>
+
+    <script>
+        var sensor = "{{ sensor }}";
+        var sensoresEncendidos = [];
+        {% for sensor in sensoresEncendidos %}
+            sensoresEncendidos.push("{{ sensor }}");
+        {% endfor %}
+
+        window.onload = onload();
     </script>
 
     <script type="text/javascript">
@@ -455,12 +599,12 @@
 
             var data = google.visualization.arrayToDataTable([
                 ['Label', 'Value'],
-                ['Barómetro', 35],
+                ['Barómetro', 0],
 
             ]);
 
             var options = {
-                width: 400, height: 120,
+                width: 600, height: 180,
                 redFrom: 87, redTo: 100,
                 yellowFrom:75, yellowTo: 87,
                 minorTicks: 5
