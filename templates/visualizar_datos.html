@@ -17,16 +17,12 @@
     <link rel="stylesheet" href="static/css/andando.css">
     <link rel="stylesheet" href="static/css/acelerador.css">
     <link rel="stylesheet" href="static/css/telefono.css">
+    <link rel="stylesheet" href="static/css/temperatura.css">
 
     <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
     <link rel="stylesheet" href="static/js/ol-ext/ol-ext.css" media="all">
     <link rel="stylesheet" href="static/css/mapa.css">
     <link rel="stylesheet" href="static/css/ol-layerswitcher.css" type="text/css">
-
-    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
-    <script src="static/js/ol-ext/ol-ext.js"></script>
-    <script src="static/js/ol-layerswitcher.js"></script>
-    <script type="text/javascript" src="static/js/mapa.js"></script>
 
 
 </head>
@@ -178,10 +174,25 @@
             <div id="Temperatura" style="display: none">
                 <div class="row" style="margin: 1%; justify-content: center">
                     <div class="col" id="chart_div" style="display: flex; justify-content: center"></div>
-                    <div class="col">
-
+                    <div class="col" style="display: flex; justify-content: center">
+                        <div class="donation-meter">
+                            <span class="glass">
+                                <span class="amount" style="height: 50%"></span>
+                            </span>
+                            <div class="bulb">
+                                <p class="bulb-text">10ºC</p>
+                                <span class="red-circle"></span>
+                                <span class="filler">
+                                    <span></span>
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col"></div>
+                    <div class="col" style="display: flex; justify-content: center; align-items: center">
+                        <div class="drop">
+                            <p class="drop-text">10%</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="row" style="margin: 1%; justify-content: center">
                     <div class="element-card col">
@@ -580,6 +591,11 @@
 	<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="static/js/jquery-6.0.0-min.js"></script>
     <script src="static/js/visualizacionDatos.js"></script>
+
+    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+    <script src="static/js/ol-ext/ol-ext.js"></script>
+    <script src="static/js/ol-layerswitcher.js"></script>
+    <script type="text/javascript" src="static/js/mapa.js"></script>
 
     <script>
         var sensor = "{{ sensor }}";

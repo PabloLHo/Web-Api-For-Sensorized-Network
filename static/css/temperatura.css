@@ -1,0 +1,79 @@
+.drop {
+    background-color: #0288d1;
+    height: 150px;
+    width: 150px;
+    border-radius: 0% 50% 50% 50%;
+    transform: rotate(45deg);
+    box-shadow: inset -25px 10px 0px -10px #03a9f4;
+    content: "0%"
+}
+
+.drop-text {
+    font-size: 40px;
+    font-weight: bold;
+    transform: rotate(-45deg);
+    margin-left: 20px;
+    margin-top: 30px;
+}
+
+
+/*Termometro*/
+
+
+.donation-meter {
+  width: 200px;
+  .glass {
+    background: #e5e5e5;
+    border-radius: 100px 100px 0 0;
+    display: block;
+    height: 150px;
+    margin: 0 35px 10px;
+    padding: 5px;
+    position: relative;
+    width: 20px;
+  }
+  .amount {
+    background: #f34e54;
+    border-radius: 100px;
+    display: block;
+    width: 10px;
+    position: absolute;
+     bottom: 5px;
+  }
+}
+
+.bulb {
+  background: #e5e5e5;
+  border-radius: 100px;
+  display: block;
+  height: 50px;
+  margin: 0 35px 10px;
+  padding: 5px;
+  position: relative;
+    top: -20px;
+    right: 15px;
+  width: 50px;
+  .red-circle {
+    background: #f34e54;
+    border-radius: 100px;
+    display: block;
+    height: 40px;
+    width: 40px;
+  }
+  .filler {
+    background: #f34e54;
+    border-radius: 100px 100px 0 0;
+    display: block;
+    height: 30px;
+    width: 10px;
+    position: relative;
+      top: -65px;
+      right: -15px;
+    z-index: 30;
+  }
+  .bulb-text{
+    font-size: 20px;
+    font-weight: bold;
+    position: absolute;
+  }
+}

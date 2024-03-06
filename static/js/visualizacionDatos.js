@@ -1,12 +1,13 @@
 var graficas = {};
 var valor;
-var sensores = ["Podómetro", "Batería", "Giroscopio", "Magnetómetro", "Acelerómetro", "Proximidad", "Luminosidad", "GPS", "Temperatura"]
-var actualizacion = [0,120,30,60,15,15,30,90,600]
+var sensores = ["Podómetro", "Batería", "Giroscopio", "Magnetómetro", "Acelerómetro", "Proximidad", "Luminosidad", "GPS", "Temperatura"];
+var actualizacion = {"Podómetro": 90000, "Batería": 120000,"Giroscopio": 30000, "Magnetómetro": 60000, "Acelerómetro": 15000, "Proximidad": 15000, "Luminosidad": 30000,"GPS": 90000, "Temperatura": 600000};
 
 function onload() {
 
     valor = sensor;
-    if(sensoresEncendidos.length == 0)
+    console.log(valor);
+    if(sensoresEncendidos.length === 0)
         document.getElementById("encendido").style.color = "red";
     document.getElementById("encendido").innerHTML = sensoresEncendidos.length + " sensores se encuentran encendidos";
 
@@ -19,18 +20,18 @@ function onload() {
         for (var i = 0; i < sensores.length; i++) {
             document.getElementById(sensores[i]).style.display = "block";
             sensorST = sensores[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-            inicializar(sensores[i]);
+            inicializar(sensorST.toLowerCase());
             crearGrafica(sensores[i]);
-            window.setInterval(window["actualizar" + sensorST], actualizacion[i]);
+            window.setInterval(window["actualizar" + sensorST], actualizacion[sensores[i]]);
         }
 
     } else {
 
         document.getElementById(valor).style.display = "block";
         sensorST = valor.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        //inicializar(valor);
+        inicializar(sensorST.toLowerCase());
         crearGrafica(valor);
-        window.setInterval(window["actualizar" + sensorST],3000);
+        window.setInterval(window["actualizar" + sensorST], actualizacion[valor]);
 
     }
 

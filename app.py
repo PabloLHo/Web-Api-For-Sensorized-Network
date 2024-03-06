@@ -15,7 +15,7 @@ CORS(app)
 
 
 sensor = ""
-
+sensores = []
 
 # Ruta base: página principal
 @app.route('/', methods=['GET', 'POST'])
