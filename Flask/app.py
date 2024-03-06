@@ -71,7 +71,7 @@ async def datosBateria():
             result = fauna_client.query(
                 q.map_(
                     q.lambda_("X", q.get(q.var("X"))),
-                    q.paginate(q.documents(q.collection("prueba")))
+                    q.paginate(q.documents(q.collection("Bateria")))
                 )
             )
             data = [item["data"] for item in result["data"]]
