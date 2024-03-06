@@ -18,11 +18,24 @@ function onload() {
 
         document.getElementById("titulo").innerHTML = "Todos los sensores";
         for (var i = 0; i < sensores.length; i++) {
+
             document.getElementById(sensores[i]).style.display = "block";
             sensorST = sensores[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-            inicializar(sensorST.toLowerCase());
-            crearGrafica(sensores[i]);
+
+            if(sensores[i] === "Temperatura"){
+                inicializar("Barometro");
+                crearGrafica("Barometro");
+                inicializar("Termometro");
+                crearGrafica("Termometro");
+                inicializar("Humedad");
+                crearGrafica("Humedad");
+            }else {
+                inicializar(sensorST.toLowerCase());
+                crearGrafica(sensores[i]);
+            }
+
             window.setInterval(window["actualizar" + sensorST], actualizacion[sensores[i]]);
+
         }
 
     } else {
