@@ -47,6 +47,40 @@ def obtener_datos():
     cur.close()
     return jsonify(data)
 
+
+@app.route('/<sensor>', methods=['POST','GET'])
+async def datosBateria(sensor):
+    try:
+        if request.method == 'POST':
+            data = request.get_json()
+            nuevo = Sensor(ast.literal_eval(data['datos']),data['fecha'])
+
+            fauna_client.query(
+                q.create(
+                    q.collection({sensor}),
+                {
+                        "data": {
+                            "datos" : nuevo.getDatos(),
+                            "fecha" : nuevo.getFecha()
+                        },
+                    }
+                )
+            )
+
+            return nuevo.to_dict(), 201
+        elif request.method == 'GET':
+            result = fauna_client.query(
+                q.map_(
+                    q.lambda_("X", q.get(q.var("X"))),
+                    q.paginate(q.documents(q.collection({sensor})))
+                )
+            )
+            data = [item["data"] for item in result["data"]]
+            return jsonify(data), 200
+    except Exception as e:
+        return f"An Error Occured: {e}"
+
+
 @app.route('/bateria', methods=['POST','GET'])
 async def datosBateria():
     try:
