@@ -1,14 +1,18 @@
 var graficas = {};
 var valor;
+var datos = {};
+var fechas = {};
 var sensores = ["Podómetro", "Batería", "Giroscopio", "Magnetómetro", "Acelerómetro", "Proximidad", "Luminosidad", "GPS", "Temperatura"];
+var uniVariable = {"Podómetro": true, "Batería": true,"Giroscopio": false, "Magnetómetro": false, "Acelerómetro": false, "Proximidad": true, "Luminosidad": false, "Temperatura": true}
 var actualizacion = {"Podómetro": 90000, "Batería": 120000,"Giroscopio": 30000, "Magnetómetro": 60000, "Acelerómetro": 15000, "Proximidad": 15000, "Luminosidad": 30000,"GPS": 90000, "Temperatura": 600000};
 
 function onload() {
 
     valor = sensor;
-    console.log(valor);
+
     if(sensoresEncendidos.length === 0)
         document.getElementById("encendido").style.color = "red";
+
     document.getElementById("encendido").innerHTML = sensoresEncendidos.length + " sensores se encuentran encendidos";
 
     if(valor === "Batería")
@@ -24,15 +28,13 @@ function onload() {
 
             if(sensores[i] === "Temperatura"){
                 inicializar("Barometro");
-                crearGrafica("Barometro");
                 inicializar("Termometro");
-                crearGrafica("Termometro");
                 inicializar("Humedad");
-                crearGrafica("Humedad");
-            }else {
+            }else
                 inicializar(sensorST.toLowerCase());
-                crearGrafica(sensores[i]);
-            }
+
+            if(sensores[i] !== "GPS")
+                crearGrafica(sensores[i], uniVariable[sensores[i]]);
 
             window.setInterval(window["actualizar" + sensorST], actualizacion[sensores[i]]);
 
@@ -42,20 +44,29 @@ function onload() {
 
         document.getElementById(valor).style.display = "block";
         sensorST = valor.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        inicializar(sensorST.toLowerCase());
-        crearGrafica(valor);
+
+        if(valor === "Temperatura"){
+            inicializar("Barometro");
+            inicializar("Termometro");
+            inicializar("Humedad");
+        }else
+            inicializar(sensorST.toLowerCase());
+
+        if(valor !== "GPS")
+            crearGrafica(valor, uniVariable[valor]);
+
         window.setInterval(window["actualizar" + sensorST], actualizacion[valor]);
 
     }
 
-    if(valor === "GPS")
+    if(valor === "GPS" || valor === "Todos")
         crearMapa();
 
 }
 
 function inicializar(s){
     $.ajax({
-            url: '/' + s,
+            url: '/' + s.toLowerCase(),
             type: 'GET',
             success: function(data) {
                 document.getElementById("actual-" + s).innerHTML = "0";
@@ -67,15 +78,10 @@ function inicializar(s){
     });
 }
 
-function crearGrafica(sensor){
+function crearGrafica(sensor, uniVariable){
 
-    const data2 = [];
-    const fechas = [];
-
-    for (var i = 0; i < 1; i++) {
-        data2.push(Math.random());
-        fechas.push(i)
-    }
+    const data2 = datos[sensor];
+    const fechas = fechas[sensor];
 
     var r = 0;
     var g = 255;

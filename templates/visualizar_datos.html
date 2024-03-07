@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, initial-scale=1.0, shrink-to-fit=no">
     <title>Sensorized Network</title>
-    <meta name="description" content="Plataforma que permite simular partidos NBA para observar posibles cambios en rotaciones de cara al futuro.">
+    <meta name="description" content="Plataforma de muestreo de datos sensoriales captados por móvil">
     <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i&amp;display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.css">
@@ -15,10 +15,12 @@
 
 
     <link rel="stylesheet" href="static/css/andando.css">
-    <link rel="stylesheet" href="static/css/lumninosidad.css">
+    <link rel="stylesheet" href="static/css/luminosidad.css">
     <link rel="stylesheet" href="static/css/acelerador.css">
     <link rel="stylesheet" href="static/css/telefono.css">
     <link rel="stylesheet" href="static/css/temperatura.css">
+    <link rel="stylesheet" href="static/css/proximidad.css">
+    <link rel="stylesheet" href="static/css/magnetometro.css">
 
     <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
     <link rel="stylesheet" href="static/js/ol-ext/ol-ext.css" media="all">
@@ -375,22 +377,26 @@
                 </div>
             </div>
             <div id="Magnetómetro" style="display: none">
+                <div class="row" style="margin: 1%; justify-content: center; position: relative">
+                    <img src="static/img/brujula.png" style="width: 250px;">
+                    <div class="brujula"><h4 class="text-magne">13 &microT</h4></div>
+                </div>
                 <div class="row" style="margin: 1%; justify-content: center">
                     <div class="element-card col">
                         <div class="front-facing">
-                            <h1 id="actual-Magnetómetro" class="abr">0</h1>
+                            <h1 id="actual-Magnetómetro-x" class="abr">0</h1>
                             <p class="title">&microT</p>
                         </div>
                     </div>
                     <div class="element-card col">
                         <div class="front-facing">
-                            <h1 id="actual-Magnetómetro" class="abr">0</h1>
+                            <h1 id="actual-Magnetómetro-y" class="abr">0</h1>
                             <p class="title">&microT</p>
                         </div>
                     </div>
                     <div class="element-card col">
                         <div class="front-facing">
-                            <h1 id="actual-Magnetómetro" class="abr">0</h1>
+                            <h1 id="actual-Magnetómetro-z" class="abr">0</h1>
                             <p class="title">&microT</p>
                         </div>
                     </div>
@@ -479,6 +485,13 @@
                 </div>
             </div>
             <div id="Proximidad" style="display: none">
+                <div class="row" style="margin: 1%; justify-content: center; align-items: center;">
+                    <div class="col-4">
+                        <div class="row" style="display: flex; margin-bottom: 10%"><h4 class="text-proximo">Proximo</h4></div>
+                        <div class="row" style="display: flex"><h4 class="text-alejado">Alejado</h4></div>
+                    </div>
+                    <div class="col" id="graph" style="align-items: center"></div>
+                </div>
                 <div class="row" style="margin: 1%; justify-content: center">
                     <div class="element-card col">
                         <div class="front-facing">
@@ -507,7 +520,7 @@
                 </div>
             </div>
             <div id="Luminosidad" style="display: none">
-                <div>
+                <div class="row" style="margin: 1%; justify-content: center">
                     <div id="box">
                       <p id="flashlight">
                         <span id="light">LIGHT</span>
@@ -565,24 +578,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" style="margin: 1%; justify-content: center">
-                    <div class="col-lg-9 col-xl-7">
-                        <div class="card shadow mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-primary fw-bold m-0">Posición</h6>
-                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
-                                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
-                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-area"><canvas id="grafica-GPS"></canvas></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -604,6 +599,9 @@
     <script src="static/js/ol-ext/ol-ext.js"></script>
     <script src="static/js/ol-layerswitcher.js"></script>
     <script type="text/javascript" src="static/js/mapa.js"></script>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="static/js/proximidad.js"></script>
 
     <script>
         var sensor = "{{ sensor }}";
