@@ -24,12 +24,14 @@ function crearMapa(){
 		]
 	})
 
+	const projection = ol.proj.get("EPSG:4326");
 	const view = new ol.View({
-		center: [-420000, 4550000],
+		center: [37.77, -3.901],
 		zoom: 15,
+		projection: projection
 	});
 
-	const map = new ol.Map({
+	map = new ol.Map({
 		target: 'map',
 		layers: [
 			grupoBase
@@ -47,39 +49,13 @@ function crearMapa(){
 
 	var mousePosition = new ol.control.MousePosition({
 		className: 'mousePosition',
-		projection: "EPSG:3857",
+		projection: "EPSG:4326",
 		coordinateFormat: function(coordinate){
 			return ol.coordinate.format(coordinate, '{x} , {y}',6);
 		}
 	});
 
 	map.addControl(mousePosition);
-
-	const positionFeature = new ol.Feature();
-	var coordinates = [-420000, 4550000];
-	positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
-	positionFeature.setStyle(
-		new ol.style.Style({
-			image: new ol.style.Circle({
-				radius: 7,
-				fill: new ol.style.Fill({
-					color: '#3399CC',
-				}),
-				stroke: new ol.style.Stroke({
-					color: '#fff',
-					width: 2,
-				}),
-			}),
-		})
-	);
-
-	miPosicion = new ol.layer.Vector({
-		source: new ol.source.Vector({
-			features: [positionFeature],
-		}),
-	});
-
-	map.addLayer(miPosicion);
 }
 
 

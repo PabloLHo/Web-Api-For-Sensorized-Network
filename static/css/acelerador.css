@@ -94,7 +94,7 @@
   height: 10px;
   background-color: #3d85ea;
   position: absolute;
-  transform: rotate(-138deg) translate(-15px, 20px);
+  transform: rotate(-138deg) translate(-15px, 15px);
 }
 .dash-panel span:nth-child(7) {
   top: 22%;
@@ -106,7 +106,7 @@
   height: 10px;
   background-color: #3d85ea;
   position: absolute;
-  transform: rotate(-120deg) translate(-12px, 20px);
+  transform: rotate(-120deg) translate(-15px, 25px);
 }
 .dash-panel span:nth-child(8) {
   top: 40%;
@@ -118,7 +118,7 @@
   height: 10px;
   background-color: #3d85ea;
   position: absolute;
-  transform: rotate(-90deg) translate(-10px, 37px);
+  transform: rotate(-90deg) translate(-10px, 30px);
 }
 .dash-panel span:nth-child(9) {
   top: 60%;
@@ -130,7 +130,7 @@
   height: 10px;
   background-color: #3d85ea;
   position: absolute;
-  transform: rotate(-70deg) translate(-7px, 25px);
+  transform: rotate(-70deg) translate(-5px, 30px);
 }
 .dash-panel span:nth-child(10) {
   font-size: 0.8em;

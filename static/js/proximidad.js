@@ -56,10 +56,10 @@ svg.append("g")
 
 function tick() {
   // Push a new data point onto the back.
-  var randomValue = Math.random();
+  distancia = 0;
 
   var variable;
-  if (randomValue < 0.5) {
+  if (distancia) {
       variable = 0.3;
   } else {
       variable = -0.5;

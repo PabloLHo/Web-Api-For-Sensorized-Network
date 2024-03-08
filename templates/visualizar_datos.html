@@ -57,7 +57,7 @@
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <form action="/visualizar_datos" method="post">
                                     <li><input type="submit" class="dropdown-item" name="sensor" value="Acelerómetro"></li>
-                                    <li><input type="submit" class="dropdown-item" name="sensor" value="Temperatura"></li>
+                                    <li><input type="submit" class="dropdown-item" name="sensor" value="Clima"></li>
                                     <li><input type="submit" class="dropdown-item" name="sensor" value="Giroscopio"></li>
                                     <li><input type="submit" class="dropdown-item" name="sensor" value="Magnetómetro"></li>
                                     <li><input type="submit" class="dropdown-item" name="sensor" value="Podómetro"></li>
@@ -86,14 +86,14 @@
                     <div class="middle col">
                         <div class="dash-panel">
                             <span>0</span>
-                            <span>0.5</span>
-                            <span>1</span>
-                            <span>1.5</span>
                             <span>2</span>
-                            <span>2.5</span>
-                            <span>3</span>
-                            <span>3.5</span>
                             <span>4</span>
+                            <span>6</span>
+                            <span>8</span>
+                            <span>10</span>
+                            <span>12</span>
+                            <span>14</span>
+                            <span>16</span>
                             <span>m/s <sup>2</sup></span>
                             <span>Eje X</span>
                             <div id="dash" class="dash">
@@ -103,14 +103,14 @@
                     <div class="middle col">
                         <div class="dash-panel">
                             <span>0</span>
-                            <span>0.5</span>
-                            <span>1</span>
-                            <span>1.5</span>
                             <span>2</span>
-                            <span>2.5</span>
-                            <span>3</span>
-                            <span>3.5</span>
                             <span>4</span>
+                            <span>6</span>
+                            <span>8</span>
+                            <span>10</span>
+                            <span>12</span>
+                            <span>14</span>
+                            <span>16</span>
                             <span>m/s <sup>2</sup></span>
                             <span>Eje Y</span>
                             <div id="dash-y" class="dash">
@@ -120,14 +120,14 @@
                     <div class="middle col">
                         <div class="dash-panel">
                             <span>0</span>
-                            <span>0.5</span>
-                            <span>1</span>
-                            <span>1.5</span>
                             <span>2</span>
-                            <span>2.5</span>
-                            <span>3</span>
-                            <span>3.5</span>
                             <span>4</span>
+                            <span>6</span>
+                            <span>8</span>
+                            <span>10</span>
+                            <span>12</span>
+                            <span>14</span>
+                            <span>16</span>
                             <span>m/s <sup>2</sup></span>
                             <span>Eje Z</span>
                             <div id="dash-z" class="dash">
@@ -137,19 +137,19 @@
                     <div class="row" style="margin: 1%; justify-content: center">
                         <div class="element-card col">
                             <div class="front-facing">
-                                <h1 id="actual-Acelerómetro" class="abr">0</h1>
+                                <h1 id="actual-Acelerometro-x" class="abr">0</h1>
                                 <p class="title">m / s <sup>2</sup></p>
                             </div>
                         </div>
                         <div class="element-card col">
                             <div class="front-facing">
-                                <h1 id="actual-Acelerómetro-y" class="abr">0</h1>
+                                <h1 id="actual-Acelerometro-y" class="abr">0</h1>
                                 <p class="title">m / s <sup>2</sup></p>
                             </div>
                         </div>
                         <div class="element-card col">
                             <div class="front-facing">
-                                <h1 id="actual-Acelerómetro-z" class="abr">0</h1>
+                                <h1 id="actual-Acelerometro-z" class="abr">0</h1>
                                 <p class="title">m / s <sup>2</sup></p>
                             </div>
                         </div>
@@ -174,7 +174,7 @@
                     </div>
                 </div>
             </div>
-            <div id="Temperatura" style="display: none">
+            <div id="Clima" style="display: none">
                 <div class="row" style="margin: 1%; justify-content: center">
                     <div class="col" id="chart_div" style="display: flex; justify-content: center"></div>
                     <div class="col" style="display: flex; justify-content: center">
@@ -200,7 +200,7 @@
                 <div class="row" style="margin: 1%; justify-content: center">
                     <div class="element-card col">
                         <div class="front-facing">
-                            <h1 id="actual-Barómetro" class="abr">0</h1>
+                            <h1 id="actual-Barometro" class="abr">0</h1>
                             <p class="title">Hectopascales</p>
                         </div>
                     </div>
@@ -238,7 +238,7 @@
             </div>
             <div id="Batería" style="display: none">
                 <div class="row" style="margin: 1%; justify-content: center">
-                    <div id="indicadorBateria" class="bateria"></div>
+                    <div id="actual-Bateria" class="bateria"></div>
                 </div>
                 <div class="row" style="margin: 1%; justify-content: center">
                     <div class="col-lg-9 col-xl-7">
@@ -340,19 +340,19 @@
                 <div class="row" style="margin: 1%; justify-content: center">
                     <div class="element-card col">
                         <div class="front-facing">
-                            <h1 id="actual-Giroscopio" class="abr">0</h1>
+                            <h1 id="actual-Giroscopio-x" class="abr">0</h1>
                             <p class="title">Radianes / s</p>
                         </div>
                     </div>
                     <div class="element-card col">
                         <div class="front-facing">
-                            <h1 id="actual-Giroscopio" class="abr">0</h1>
+                            <h1 id="actual-Giroscopio-y" class="abr">0</h1>
                             <p class="title">Radianes / s</p>
                         </div>
                     </div>
                     <div class="element-card col">
                         <div class="front-facing">
-                            <h1 id="actual-Giroscopio" class="abr">0</h1>
+                            <h1 id="actual-Giroscopio-z" class="abr">0</h1>
                             <p class="title">Radianes / s</p>
                         </div>
                     </div>
@@ -384,19 +384,19 @@
                 <div class="row" style="margin: 1%; justify-content: center">
                     <div class="element-card col">
                         <div class="front-facing">
-                            <h1 id="actual-Magnetómetro-x" class="abr">0</h1>
+                            <h1 id="actual-Magnetometro-x" class="abr">0</h1>
                             <p class="title">&microT</p>
                         </div>
                     </div>
                     <div class="element-card col">
                         <div class="front-facing">
-                            <h1 id="actual-Magnetómetro-y" class="abr">0</h1>
+                            <h1 id="actual-Magnetometro-y" class="abr">0</h1>
                             <p class="title">&microT</p>
                         </div>
                     </div>
                     <div class="element-card col">
                         <div class="front-facing">
-                            <h1 id="actual-Magnetómetro-z" class="abr">0</h1>
+                            <h1 id="actual-Magnetometro-z" class="abr">0</h1>
                             <p class="title">&microT</p>
                         </div>
                     </div>
@@ -460,7 +460,7 @@
                 </div>
                     <div class="element-card col">
                         <div class="front-facing">
-                            <h1 id="actual-Podómetro" class="abr">0</h1>
+                            <h1 id="actual-Podometro" class="abr">0</h1>
                             <p class="title">Pasos</p>
                         </div>
                     </div>
@@ -561,19 +561,19 @@
                 <div class="row" style="margin: 1%; justify-content: center">
                     <div class="element-card col">
                         <div class="front-facing">
-                            <h1 id="actual-GPS" class="abr">0</h1>
+                            <h1 id="actual-GPS-x" class="abr">0</h1>
                             <p class="title">Latitud</p>
                         </div>
                     </div>
                     <div class="element-card col">
                         <div class="front-facing">
-                            <h1 id="actual-GPS" class="abr">0</h1>
+                            <h1 id="actual-GPS-y" class="abr">0</h1>
                             <p class="title">Longitud</p>
                         </div>
                     </div>
                     <div class="element-card col">
                         <div class="front-facing">
-                            <h1 id="actual-GPS" class="abr">0</h1>
+                            <h1 id="actual-GPS-z" class="abr">0</h1>
                             <p class="title">Altitud</p>
                         </div>
                     </div>
@@ -609,7 +609,9 @@
         {% for sensor in sensoresEncendidos %}
             sensoresEncendidos.push("{{ sensor }}");
         {% endfor %}
-
+        var map;
+        var miPosicion;
+        var distancia;
         window.onload = onload();
     </script>
 

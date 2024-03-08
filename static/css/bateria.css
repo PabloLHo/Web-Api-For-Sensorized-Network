@@ -20,7 +20,7 @@
 }
 
 .bateria::before{
-  content: '100%';
+  content: "";
   display: block;
   position: absolute;
   top: 0.5em;
@@ -61,10 +61,10 @@
   position: absolute;
   top: 0.25em;
   left: 0.25em;
-  width: calc(var(--carga) - 0.5em);
+  width: calc(var(--carga) - 1em);
   height: calc(100% - 0.5em);
   background-color: var(--color-carga);
-  content: "100%";
+  content: "";
   font-weight: bold;
 }
 

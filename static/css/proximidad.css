@@ -9,6 +9,7 @@
   -webkit-text-fill-color: transparent;
   font-size: 30px;
   font-weight: bold;
+    text-align: center;
 }
 
 .text-alejado {
@@ -22,6 +23,7 @@
   -webkit-text-fill-color: transparent;
   font-size: 30px;
   font-weight: bolder;
+    text-align: center;
 }
 
 
