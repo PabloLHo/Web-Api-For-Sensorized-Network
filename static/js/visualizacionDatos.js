@@ -11,11 +11,7 @@ var unidades = { "Podómetro": "Pasos", "Batería": "%","Giroscopio": "Radianes 
 function onload() {
 
     valor = sensor;
-
-    if(sensoresEncendidos.length === 0)
-        document.getElementById("encendido").style.color = "red";
-
-    document.getElementById("encendido").innerHTML = sensoresEncendidos.length + " sensores se encuentran encendidos";
+    window.setInterval(encendidos,2000);
 
     if(valor === "Batería")
         document.getElementById("indicadorBateria").style.display = "none";
@@ -81,7 +77,6 @@ function inicializaGPS(){
             type: 'GET',
             success: function(data) {
                 console.log(data);
-
                 const positionFeature = new ol.Feature();
                 var coordinates = [data[data.length - 1].datos[1], data[data.length - 1].datos[0]];
                 console.log(coordinates);
@@ -109,6 +104,9 @@ function inicializaGPS(){
 
                 map.addLayer(miPosicion);
                 console.log("Recogida inicial correcta para el GPS");
+
+                document.getElementById("actual-GPS-x").innerHTML = coordinates[0];
+                document.getElementById("actual-GPS-y").innerHTML = coordinates[1];
             },
             error: function(error) {
                 console.error('Error:', error);
@@ -303,8 +301,23 @@ function actualizarGiroscopio(sensorST) {
     elementoZ.style.transform = 'rotateZ(' + numero_x + 'deg)';
 }
 
-function actualizarMagnetometro() {
+function actualizarMagnetometro(sensorST) {
+    var actual = datos[sensorST][datos[sensorST].length - 1];
+    var numero_x = actual[0];
+    var numero_y = actual[1];
+    var numero_z = actual[2];
+    //actualizarGrafica("Acelerómetro");
+    document.getElementById("actual-" + sensorST + "-x").innerHTML = numero_x.toFixed(2);
+    document.getElementById("actual-" + sensorST + "-y").innerHTML = numero_y.toFixed(2);
+    document.getElementById("actual-" + sensorST + "-z").innerHTML = numero_z.toFixed(2);
 
+    var absoluto = Math.sqrt(Math.pow(numero_x,2) + Math.pow(numero_y,2) + Math.pow(numero_z,2));
+
+    document.getElementById("text-magnetometro").innerHTML = absoluto.toFixed(2) + "&microT";
+
+    var radianes = Math.atan2(actual[1], actual[0]);
+    var grados = radianes * 180 / Math.PI;
+    document.getElementById("img_brujula").style.transform = "rotate(" + grados + "deg)";
 }
 
 function actualizarTemperatura() {
@@ -340,4 +353,33 @@ function actualizarProximidad(sensorST) {
 
 function actualizarGPS() {
 
+}
+
+async function encendidos(){
+
+    var total = 0;
+
+    for(var i = 0; i < sensores.length; i++){
+        sensorST = sensores[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        try {
+            var data = await $.ajax({
+                url: '/' + sensorST,
+                type: 'GET'
+            });
+
+            var actual = new Date();
+            var ultima = new Date(data[data.length - 1].fecha);
+
+            var diferenciaMilisegundos = actual.getTime() - ultima.getTime();
+            if (Math.abs(diferenciaMilisegundos / 1000) <= actualizacion[sensores[i]]) {
+                total++;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+    if(total === 0)
+        document.getElementById("encendido").style.color = "red";
+
+    document.getElementById("encendido").innerHTML = total + " sensores se encuentran encendidos";
 }
