@@ -1,17 +1,20 @@
 var graficas = {};
 var valor;
-var datos = {"Podometro": [], "Bateria": [],"Giroscopio": [], "Magnetometro": [], "Acelerometro": [], "Proximidad": [], "Luminosidad": [], "Temperatura": [], "Barometro": [], "Humedad": []};
-var fechas = {"Podometro": [], "Bateria": [],"Giroscopio": [], "Magnetometro": [], "Acelerometro": [], "Proximidad": [], "Luminosidad": [], "Temperatura": [], "Barometro": [], "Humedad": []};
-var sensores = ["Podómetro", "Batería", "Giroscopio", "Magnetómetro", "Acelerómetro", "Proximidad", "Luminosidad", "GPS", "Clima"];
-var uniVariable = {"Podómetro": true, "Batería": true,"Giroscopio": false, "Magnetómetro": false, "Acelerómetro": false, "Proximidad": true, "Luminosidad": true, "Clima": false}
-var actualizacion = {"Podómetro": 90000, "Batería": 120000,"Giroscopio": 30000, "Magnetómetro": 60000, "Acelerómetro": 15000, "Proximidad": 15000, "Luminosidad": 30000,"GPS": 90000, "Clima": 600000};
-var unidades = { "Podómetro": "Pasos", "Batería": "%","Giroscopio": "Radianes / s", "Magnetómetro": "µT", "Acelerómetro": 'm / s', "Proximidad": "cm", "Luminosidad": "lx", "Clima": ["hPa", "ºC", "%"] }
-
+var datos = {"Podometro": [], "Bateria": [],"Giroscopio": [], "Magnetometro": [], "Acelerometro": [], "Proximidad": [], "Luminosidad": [], "Termometro": [], "Barometro": [], "Humedad": []};
+var fechas = {"Podometro": [], "Bateria": [],"Giroscopio": [], "Magnetometro": [], "Acelerometro": [], "Proximidad": [], "Luminosidad": [], "Termometro": [], "Barometro": [], "Humedad": []};
+var sensores = ["Podometro", "Bateria", "Giroscopio", "Magnetometro", "Acelerometro", "Proximidad", "Luminosidad", "GPS", "Clima"];
+var todosSensores = ["Podometro", "Bateria", "Giroscopio", "Magnetometro", "Acelerometro", "Proximidad", "Luminosidad", "GPS", "Barometro", "Termometro", "Humedad"];
+var uniVariable = {"Podometro": true, "Bateria": true,"Giroscopio": false, "Magnetometro": false, "Acelerometro": false, "Proximidad": true, "Luminosidad": true, "Clima": false}
+var actualizacion = {"Podometro": 90000, "Bateria": 120000,"Giroscopio": 30000, "Magnetometro": 60000, "Acelerometro": 15000, "Proximidad": 15000, "Luminosidad": 30000,"GPS": 90000, "Clima": 600000};
+var unidades = { "Podometro": "Pasos", "Bateria": "%","Giroscopio": "Radianes / s", "Magnetometro": "µT", "Acelerometro": 'm / s', "Proximidad": "cm", "Luminosidad": "lx", "Clima": ["hPa", "ºC", "%"] }
+var actualizado = {"Podometro": true, "Bateria": true,"Giroscopio": true, "Magnetometro": true, "Acelerometro": true, "Proximidad": true, "Luminosidad": true, "Clima": true}
 
 function onload() {
 
     valor = sensor;
+
     encendidos();
+
     window.setInterval(encendidos,10000);
 
     if(valor === "Batería")
@@ -25,18 +28,17 @@ function onload() {
 
             document.getElementById(sensores[i]).style.display = "block";
             document.getElementById("separador-" + sensores[i]).style.display = "block";
-            sensorST = sensores[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-            window["actualizar" + sensorST]();
-            window.setInterval(window["actualizar" + sensorST], actualizacion[sensores[i]]);
+            window["actualizar" + sensores[i]]();
+            window.setInterval(window["actualizar" + sensores[i]], actualizacion[sensores[i]]);
 
         }
 
     } else {
 
-        document.getElementById(valor).style.display = "block";
         sensorST = valor.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        document.getElementById(sensorST).style.display = "block";
         window["actualizar" + sensorST]();
-        window.setInterval(window["actualizar" + sensorST], actualizacion[valor]);
+        window.setInterval(window["actualizar" + sensorST], actualizacion[sensorST]);
 
     }
 
@@ -58,6 +60,15 @@ async function obtenerDatos(sensorST){
     }
 }
 
+function guardarDatos(sensorST, data){
+
+    for(var i = 0; i < data.length; i++){
+        fechas[sensorST].push(data[i].datos);
+        datos[sensorST].push(data[i].fecha);
+    }
+
+}
+
 function actualizarAcelerometro(){
 
     var sensorST = "Acelerometro";
@@ -70,6 +81,17 @@ function actualizarAcelerometro(){
         var numero_x = actual[0];
         var numero_y = actual[1];
         var numero_z = actual[2];
+
+        guardarDatos(sensorST, valor);
+
+        if(actualizado[sensorST]){
+
+            actualizado[sensorST] = !actualizado[sensorST];
+            preparacionDatos(sensorST);
+
+        }else{
+            actualizarGrafica();
+        }
 
 
         giro_x = 60 + Math.abs(numero_x) * 14.5;
@@ -91,9 +113,21 @@ function actualizarBateria() {
     var sensorST = "Bateria";
     var data = obtenerDatos(sensorST);
 
+
     data.then((valor) => {
         var actual = valor[valor.length - 1].datos;
         var bateria = actual[0];
+
+        guardarDatos(sensorST, valor);
+
+        if(actualizado[sensorST]){
+
+            actualizado[sensorST] = !actualizado[sensorST];
+            preparacionDatos(sensorST);
+
+        }else{
+            actualizarGrafica();
+        }
 
         var root = document.documentElement;
         root.style.setProperty('--carga', bateria + '%');
@@ -116,6 +150,17 @@ function actualizarGiroscopio() {
         var numero_x = actual[0] * 180 / Math.PI;
         var numero_y = actual[1] * 180 / Math.PI;
         var numero_z = actual[2] * 180 / Math.PI;
+
+        guardarDatos(sensorST, valor);
+
+        if(actualizado[sensorST]){
+
+            actualizado[sensorST] = !actualizado[sensorST];
+            preparacionDatos(sensorST);
+
+        }else{
+            actualizarGrafica();
+        }
 
         var elementoX = document.querySelector('.total-x');
         elementoX.style.transform = 'rotateX(' + numero_x + 'deg)';
@@ -140,6 +185,17 @@ function actualizarMagnetometro() {
         var numero_y = actual[1];
         var numero_z = actual[2];
 
+        guardarDatos(sensorST, valor);
+
+        if(actualizado[sensorST]){
+
+            actualizado[sensorST] = !actualizado[sensorST];
+            preparacionDatos(sensorST);
+
+        }else{
+            actualizarGrafica();
+        }
+
         document.getElementById("actual-" + sensorST + "-x").innerHTML = numero_x.toFixed(2);
         document.getElementById("actual-" + sensorST + "-y").innerHTML = numero_y.toFixed(2);
         document.getElementById("actual-" + sensorST + "-z").innerHTML = numero_z.toFixed(2);
@@ -156,10 +212,58 @@ function actualizarMagnetometro() {
 
 function actualizarClima() {
 
+    var sensorST = "Clima";
+    console.log("Actualizando " + sensorST);
+
+    var dataTemp = obtenerDatos("Termometro");
+    var dataHum = obtenerDatos("Humedad");
+    var dataPre = obtenerDatos("Barometro");
+
+    dataTemp.then((valor) => {
+
+        var actual = valor[valor.length - 1].datos;
+        document.getElementById("actual-Temperatura").innerHTML = actual;
+
+        guardarDatos("Termometro", valor);
+
+    });
+
+    dataHum.then((valor) => {
+
+        var actual = valor[valor.length - 1].datos;
+        document.getElementById("actual-Humedad").innerHTML = actual;
+
+        guardarDatos("Humedad", valor);
+
+    });
+
+    dataPre.then((valor) => {
+
+        var actual = valor[valor.length - 1].datos;
+        document.getElementById("actual-Barometro").innerHTML = actual;
+
+        guardarDatos("Barometro", valor);
+
+    });
+
+    preparacionClima()
+
+
 }
 
 function actualizarPodometro() {
+    var sensorST = "Podometro";
+    var data = obtenerDatos(sensorST);
 
+    data.then((valor) => {
+
+        var actual = valor[valor.length - 1].datos;
+
+        document.getElementById("actual-" + sensorST + "-x").innerHTML = actual;
+
+        guardarDatos(sensorST, valor);
+
+    });
 }
 
 function actualizarLuminosidad() {
@@ -168,7 +272,19 @@ function actualizarLuminosidad() {
     var data = obtenerDatos(sensorST);
 
     data.then((valor) => {
+
         var actual = valor[valor.length - 1].datos[0];
+
+        guardarDatos(sensorST, valor);
+
+        if(actualizado[sensorST]){
+
+            actualizado[sensorST] = !actualizado[sensorST];
+            preparacionDatos(sensorST);
+
+        }else{
+            actualizarGrafica();
+        }
 
         document.getElementById("actual-" + sensorST).innerHTML = actual;
 
@@ -187,7 +303,19 @@ function actualizarProximidad() {
     var data = obtenerDatos(sensorST);
 
     data.then((valor) => {
+
         var actual = valor[valor.length - 1].datos;
+
+        guardarDatos(sensorST, valor);
+
+        if(actualizado[sensorST]){
+
+            actualizado[sensorST] = !actualizado[sensorST];
+            preparacionDatos(sensorST);
+
+        }else{
+            actualizarGrafica();
+        }
 
         document.getElementById("actual-" + sensorST).innerHTML = actual;
 
@@ -243,11 +371,91 @@ function actualizarGPS() {
 
 //Gráficas
 
-function graficaClima(){
+function creacionGrafica(data, sensorST){
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        scales: {
+          x: {
+            type: "time",
+            title: {
+                display: true,
+                text: 'Fecha recogida de datos'
+            },
+            time: {
+                unit: 'second',
+                stepSize: actualizacion[sensorST]
+            },
+            ticks: {
+                display: true,
+                source: 'auto'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: unidades[sensorST]
+            }
+          }
+        }
+      },
+    };
 
+    var myChart = new Chart(document.getElementById("grafica-" + sensorST), config);
+    myChart.canvas.parentNode.style.width = '100%';
+    graficas[sensorST] = myChart;
 }
 
-function crearGrafica(sensor, sensorST, uniVariable){
+function preparacionClima(){
+
+    const data_pre = datos["Termometro"];
+    const data_hum = datos["Humedad"];
+    const data_tem = datos["Barometro"];
+    const data_x = fechas["Termometro"];
+
+    var r = 0;
+    var g = 255;
+    var b = 0;
+    var datasets = [];
+
+    var nombre1 = "Temperatura";
+    var nombre2 = "Humedad";
+    var nombre3 = "Presión";
+
+
+    datasets = [{
+        label: nombre1,
+        backgroundColor: 'rgb(' + r + ',' + g + ',' + b + ')',
+        borderColor: 'rgb(' + r + ',' + g + ',' + b + ')',
+        data: data_tem,
+        spanGaps: true
+    },
+    {
+        label: nombre2,
+        backgroundColor: 'rgb(' + g + ',' + r + ',' + b + ')',
+        borderColor: 'rgb(' + g + ',' + r + ',' + b + ')',
+        data: data_hum,
+        spanGaps: true
+    },
+    {
+        label: nombre3,
+        backgroundColor: 'rgb(' + r + ',' + b + ',' + g + ')',
+        borderColor: 'rgb(' + r + ',' + b + ',' + g + ')',
+        data: data_pre,
+        spanGaps: true
+    }]
+
+
+    const data = {
+        labels: data_x,
+        datasets: datasets
+    };
+
+    creacionGrafica(data, "Clima");
+}
+
+function preparacionDatos(sensorST){
 
     const data_y = datos[sensorST];
     const data_x = fechas[sensorST];
@@ -257,11 +465,11 @@ function crearGrafica(sensor, sensorST, uniVariable){
     var b = 0;
     var datasets = [];
 
-    if(uniVariable) {
+    if(uniVariable[sensorST]) {
         for(var i = 0; i < data_x.length; i++)
             data_y[i] = data_y[i][0];
         datasets = [{
-            label: sensor,
+            label: sensorST,
             backgroundColor: 'rgb(' + r + ',' + g + ',' + b + ')',
             borderColor: 'rgb(' + r + ',' + g + ',' + b + ')',
             data: data_y,
@@ -311,50 +519,59 @@ function crearGrafica(sensor, sensorST, uniVariable){
         labels: data_x,
         datasets: datasets
     };
-    console.log(data_x);
-    console.log(data_y);
-    const config = {
-      type: 'line',
-      data: data,
-      options: {
-        scales: {
-          x: {
-            type: "time",
-            title: {
-                display: true,
-                text: 'Fecha recogida de datos'
-            },
-            time: {
-                unit: 'second',
-                stepSize: actualizacion[sensor]
-            },
-            ticks: {
-                display: true,
-                source: 'auto'
-            }
-          },
-          y: {
-            title: {
-              display: true,
-              text: unidades[sensor]
-            }
-          }
-        }
-      },
-    };
 
-    var myChart = new Chart(document.getElementById("grafica-" + sensor), config);
-    myChart.canvas.parentNode.style.width = '100%';
-    graficas[sensor] = myChart;
+    creacionGrafica(data, sensorST);
 
 }
 
 function actualizarGrafica(sensor){
-    document.getElementById("actual-" + sensor).innerHTML = 0;
+
     var myChart = graficas[sensor];
-    myChart.config.data.labels.push(myChart.config.data.labels[myChart.config.data.labels.length - 1] + 1);
-    myChart.config.data.datasets[0].data.push(0);
+
+    myChart.config.data.labels = fechas[sensor];
+
+    if(!uniVariable[sensorST]){
+
+        var data_x = [];
+        var data_y = [];
+        var data_z = [];
+
+        for(var i = 0; i < valor[sensor].length; i++){
+            data_x.push(valor[sensor][i][0]);
+            data_y.push(valor[sensor][i][1]);
+            data_z.push(valor[sensor][i][2]);
+        }
+
+        myChart.config.data.datasets[0].data = data_x;
+        myChart.config.data.datasets[1].data = data_y;
+        myChart.config.data.datasets[2].data = data_z;
+
+    }else{
+
+        myChart.config.data.datasets[0].data = valor[sensor];
+
+    }
+
     myChart.update();
+
+}
+
+function actualizarGraficaClima(){
+
+    var myChart = graficas["Clima"];
+
+    myChart.config.data.labels = fechas["Termometro"];
+
+    var data_tem = valor["Termometro"];
+    var data_hum = valor["Humedad"];
+    var data_pre = valor["Barometro"];
+
+    myChart.config.data.datasets[0].data = data_tem;
+    myChart.config.data.datasets[1].data = data_hum;
+    myChart.config.data.datasets[2].data = data_pre;
+
+    myChart.update();
+
 }
 
 //Control de los sensores encendidos
@@ -363,27 +580,36 @@ async function encendidos(){
 
     var total = 0;
 
-    for(var i = 0; i < sensores.length; i++){
-        sensorST = sensores[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    for(var i = 0; i < todosSensores.length; i++){
+        sensorST = todosSensores[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         try {
             var data = await $.ajax({
                 url: '/' + sensorST,
                 type: 'GET'
             });
-            console.log(data);
-            var actual = new Date();
-            var ultima = new Date(data[data.length - 1].fecha);
+            if(data.length > 0) {
 
-            var diferenciaMilisegundos = actual.getTime() - ultima.getTime();
-            if (Math.abs(diferenciaMilisegundos / 1000) <= actualizacion[sensores[i]]) {
-                total++;
+                var actual = new Date();
+                var ultima = new Date(data[data.length - 1].fecha);
+
+                var diferenciaMilisegundos = actual.getTime() - ultima.getTime();
+                if (todosSensores[i] === "Humedad" || todosSensores[i] === "Termometro" || todosSensores[i] === "Barometro") {
+                    if (Math.abs(diferenciaMilisegundos) <= actualizacion["Clima"])
+                        total++;
+                } else {
+                    if (Math.abs(diferenciaMilisegundos) <= actualizacion[todosSensores[i]])
+                        total++;
+                }
             }
         } catch (error) {
             console.error('Error:', error);
         }
     }
+    document.getElementById("encendido").style.color = "green";
     if(total === 0)
         document.getElementById("encendido").style.color = "red";
-
-    document.getElementById("encendido").innerHTML = total + " sensores se encuentran encendidos";
+    else if(total === 1)
+        document.getElementById("encendido").innerHTML = total + " sensor se encuentra activo";
+    else
+        document.getElementById("encendido").innerHTML = total + " sensores se encuentran activos";
 }
