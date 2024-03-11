@@ -1,7 +1,6 @@
 var graficas = {};
 var valor;
 var datos = {"Podometro": [], "Bateria": [],"Giroscopio": [], "Magnetometro": [], "Acelerometro": [], "Proximidad": [], "Luminosidad": [], "Termometro": [], "Barometro": [], "Humedad": []};
-var fechas = {"Podometro": [], "Bateria": [],"Giroscopio": [], "Magnetometro": [], "Acelerometro": [], "Proximidad": [], "Luminosidad": [], "Termometro": [], "Barometro": [], "Humedad": []};
 var sensores = ["Podometro", "Bateria", "Giroscopio", "Magnetometro", "Acelerometro", "Proximidad", "Luminosidad", "GPS", "Clima"];
 var todosSensores = ["Podometro", "Bateria", "Giroscopio", "Magnetometro", "Acelerometro", "Proximidad", "Luminosidad", "GPS", "Barometro", "Termometro", "Humedad"];
 var uniVariable = {"Podometro": true, "Bateria": true,"Giroscopio": false, "Magnetometro": false, "Acelerometro": false, "Proximidad": true, "Luminosidad": true, "Clima": false}
@@ -62,9 +61,10 @@ async function obtenerDatos(sensorST){
 
 function guardarDatos(sensorST, data){
 
+    datos[sensorST].length = 0;
+
     for(var i = 0; i < data.length; i++){
-        fechas[sensorST].push(data[i].datos);
-        datos[sensorST].push(data[i].fecha);
+        datos[sensorST].push(data[i]);
     }
 
 }
@@ -90,7 +90,9 @@ function actualizarAcelerometro(){
             preparacionDatos(sensorST);
 
         }else{
-            actualizarGrafica();
+
+            actualizarGrafica(sensorST);
+
         }
 
 
@@ -126,7 +128,9 @@ function actualizarBateria() {
             preparacionDatos(sensorST);
 
         }else{
-            actualizarGrafica();
+
+            actualizarGrafica(sensorST);
+
         }
 
         var root = document.documentElement;
@@ -159,8 +163,14 @@ function actualizarGiroscopio() {
             preparacionDatos(sensorST);
 
         }else{
-            actualizarGrafica();
+
+            actualizarGrafica(sensorST);
+
         }
+
+        document.getElementById("actual-" + sensorST + "-x").innerHTML = numero_x.toFixed(2);
+        document.getElementById("actual-" + sensorST + "-y").innerHTML = numero_y.toFixed(2);
+        document.getElementById("actual-" + sensorST + "-z").innerHTML = numero_z.toFixed(2);
 
         var elementoX = document.querySelector('.total-x');
         elementoX.style.transform = 'rotateX(' + numero_x + 'deg)';
@@ -193,7 +203,9 @@ function actualizarMagnetometro() {
             preparacionDatos(sensorST);
 
         }else{
-            actualizarGrafica();
+
+            actualizarGrafica(sensorST);
+
         }
 
         document.getElementById("actual-" + sensorST + "-x").innerHTML = numero_x.toFixed(2);
@@ -259,7 +271,8 @@ function actualizarPodometro() {
 
         var actual = valor[valor.length - 1].datos;
 
-        document.getElementById("actual-" + sensorST + "-x").innerHTML = actual;
+        document.getElementById("actual-" + sensorST).innerHTML = actual;
+        document.getElementById("actual-distancia").innerHTML = actual * 0.7;
 
         guardarDatos(sensorST, valor);
 
@@ -283,14 +296,16 @@ function actualizarLuminosidad() {
             preparacionDatos(sensorST);
 
         }else{
-            actualizarGrafica();
+
+            actualizarGrafica(sensorST);
+
         }
 
         document.getElementById("actual-" + sensorST).innerHTML = actual;
 
         var textShadow1, textShadow2;
-        textShadow1 = '#fff 0 0 ' + (actual / 10 * 2) + 'px'; // Sombra más débil
-        textShadow2 = '#fcffbb 0 0 ' + (actual / 10 * 5) + 'px'; // Sombra más fuerte
+        textShadow1 = '#fff 0 0 ' + (actual / 20000 * 2) + 'px'; // Sombra más débil
+        textShadow2 = '#fcffbb 0 0 ' + (actual / 20000 * 5) + 'px'; // Sombra más fuerte
 
         var lightElement = document.getElementById('light');
         lightElement.style.textShadow = textShadow1 + ', ' + textShadow2;
@@ -314,7 +329,9 @@ function actualizarProximidad() {
             preparacionDatos(sensorST);
 
         }else{
-            actualizarGrafica();
+
+            actualizarGrafica(sensorST);
+
         }
 
         document.getElementById("actual-" + sensorST).innerHTML = actual;
@@ -334,7 +351,7 @@ function actualizarGPS() {
 
     data.then((valor) => {
 
-        map.remove(miPosicion);
+        map.removeLayer(miPosicion);
 
         const positionFeature = new ol.Feature();
 
@@ -371,48 +388,42 @@ function actualizarGPS() {
 
 //Gráficas
 
-function creacionGrafica(data, sensorST){
-    const config = {
-      type: 'line',
-      data: data,
-      options: {
-        scales: {
-          x: {
-            type: "time",
-            title: {
-                display: true,
-                text: 'Fecha recogida de datos'
-            },
-            time: {
-                unit: 'second',
-                stepSize: actualizacion[sensorST]
-            },
-            ticks: {
-                display: true,
-                source: 'auto'
-            }
-          },
-          y: {
-            title: {
-              display: true,
-              text: unidades[sensorST]
-            }
-          }
-        }
-      },
-    };
-
-    var myChart = new Chart(document.getElementById("grafica-" + sensorST), config);
-    myChart.canvas.parentNode.style.width = '100%';
-    graficas[sensorST] = myChart;
-}
-
 function preparacionClima(){
 
-    const data_pre = datos["Termometro"];
-    const data_hum = datos["Humedad"];
-    const data_tem = datos["Barometro"];
-    const data_x = fechas["Termometro"];
+    const data_pre = [];
+    const data_hum = [];
+    const data_tem = [];
+
+    var ultimaFechaTer = new Date(datos["Termometro"][datos["Termometro"].length - 1].fecha);
+    var ultimaFechaHum = new Date(datos["Humedad"][datos["Humedad"].length - 1].fecha);
+    var ultimaFechaPre = new Date(datos["Barometro"][datos["Barometro"].length - 1].fecha);
+
+    var ultimaFecha = new Date(Math.max(ultimaFechaTer.getTime(), ultimaFechaPre.getTime(), ultimaFechaHum.getTime()));
+    ultimaFecha /= 1000;
+
+    for(var i = 0;  i < datos["Termometro"].length; i++){
+        var fecha = new Date(datos["Termometro"][i].fecha) / 1000;
+        if(fecha >= (ultimaFecha - 600) && fecha < ultimaFecha){
+            var dato = {timestamp: new Date(datos["Termometro"][i].fecha).getTime(), valor: datos["Termometro"][i].datos};
+            data_tem.push(dato);
+        }
+    }
+
+    for(var i = 0;  i < datos["Barometro"].length; i++){
+        var fecha = new Date(datos["Barometro"][i].fecha) / 1000;
+        if(fecha >= (ultimaFecha - 600) && fecha < ultimaFecha){
+            var dato = {timestamp: new Date(datos["Barometro"][i].fecha).getTime(), valor: datos["Barometro"][i].datos};
+            data_pre.push(dato);
+        }
+    }
+
+    for(var i = 0;  i < datos["Humedad"].length; i++){
+        var fecha = new Date(datos["Humedad"][i].fecha) / 1000;
+        if(fecha >= (ultimaFecha - 600) && fecha < ultimaFecha){
+            var dato = {timestamp: new Date(datos["Humedad"][i].fecha).getTime(), valor: datos["Humedad"][i].datos};
+            data_hum.push(dato);
+        }
+    }
 
     var r = 0;
     var g = 255;
@@ -448,7 +459,7 @@ function preparacionClima(){
 
 
     const data = {
-        labels: data_x,
+        labels: [],
         datasets: datasets
     };
 
@@ -457,102 +468,191 @@ function preparacionClima(){
 
 function preparacionDatos(sensorST){
 
-    const data_y = datos[sensorST];
-    const data_x = fechas[sensorST];
+    var ultimaFecha = new Date(datos[sensorST][datos[sensorST].length - 1].fecha);
+    ultimaFecha = ultimaFecha / 1000;
+    const haceDiezMinutos = ultimaFecha - 600;
+
+    var nuevosDatos = [];
+
+    for(var i = 0; i < datos[sensorST].length; i++){
+        var fecha = new Date(datos[sensorST][i].fecha) / 1000;
+        if(fecha >= haceDiezMinutos && fecha < ultimaFecha)
+            nuevosDatos.push(datos[sensorST][i]);
+    }
+
 
     var r = 0;
     var g = 255;
     var b = 0;
+    var fechas = [];
+    var valores = [];
     var datasets = [];
 
     if(uniVariable[sensorST]) {
-        for(var i = 0; i < data_x.length; i++)
-            data_y[i] = data_y[i][0];
+
+        for(var i = nuevosDatos.length - 1; i >= 0; i--) {
+            fechas.push(nuevosDatos[i].fecha);
+            valores.push(nuevosDatos[i].datos[0]);
+        }
+
         datasets = [{
             label: sensorST,
             backgroundColor: 'rgb(' + r + ',' + g + ',' + b + ')',
             borderColor: 'rgb(' + r + ',' + g + ',' + b + ')',
-            data: data_y,
+            data: valores,
             spanGaps: true,
         }]
     }else {
 
-        var data1_y = [];
-        var data2_y = [];
-        var data3_y = [];
+        var data_x = [];
+        var data_y = [];
+        var data_z = [];
 
         var nombre1 = "Eje X";
         var nombre2 = "Eje Y";
         var nombre3 = "Eje Z";
 
-        for (var i = 0; i < data_y.length; i++) {
-            data1_y.push(data_y[0][0]);
-            data2_y.push(data_y[0][1]);
-            data3_y.push(data_y[0][2]);
+        for(var i = nuevosDatos.length - 1; i >= 0; i--) {
+            fechas.push(nuevosDatos[i].fecha);
+            data_x.push(nuevosDatos[i].datos[0]);
+            data_y.push(nuevosDatos[i].datos[1]);
+            data_z.push(nuevosDatos[i].datos[2]);
         }
+
 
         datasets = [{
             label: nombre1,
             backgroundColor: 'rgb(' + r + ',' + g + ',' + b + ')',
             borderColor: 'rgb(' + r + ',' + g + ',' + b + ')',
-            data: data1_y,
+            data: data_x,
             spanGaps: true
         },
             {
                 label: nombre2,
                 backgroundColor: 'rgb(' + g + ',' + r + ',' + b + ')',
                 borderColor: 'rgb(' + g + ',' + r + ',' + b + ')',
-                data: data2_y,
+                data: data_y,
                 spanGaps: true
             },
             {
                 label: nombre3,
                 backgroundColor: 'rgb(' + r + ',' + b + ',' + g + ')',
                 borderColor: 'rgb(' + r + ',' + b + ',' + g + ')',
-                data: data3_y,
+                data: data_z,
                 spanGaps: true
             }]
     }
 
-
     const data = {
-        labels: data_x,
+        labels: fechas,
         datasets: datasets
     };
 
+
     creacionGrafica(data, sensorST);
 
+}
+
+function creacionGrafica(data, sensorST){
+
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        scales: {
+          x: {
+            type: "time",
+            title: {
+                display: true,
+                text: 'Fecha recogida de datos'
+            },
+            time: {
+                unit: 'second',
+                displayFormats: {
+                        second: 'h:mm:ss a' // Formato de visualización del tiempo en el eje x
+                },
+                stepSize: actualizacion[sensorST] / 1000
+            },
+            reverse: true,
+            ticks: {
+                display: true,
+                source: 'auto',
+                autoSkipPadding: 10
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: unidades[sensorST]
+            }
+          }
+        }
+      },
+    };
+
+    if(sensorST === "Bateria"){
+        config.options.scales.y.max = 100;
+        config.options.scales.y.min = 0;
+    }
+
+    var myChart = new Chart(document.getElementById("grafica-" + sensorST), config);
+    myChart.canvas.parentNode.style.width = '100%';
+    graficas[sensorST] = myChart;
 }
 
 function actualizarGrafica(sensor){
 
     var myChart = graficas[sensor];
 
-    myChart.config.data.labels = fechas[sensor];
+    var fecha = new Date(myChart.config.data.labels[0]);
+    var ultimaFecha = new Date(datos[sensor][datos[sensor].length - 1].fecha);
 
-    if(!uniVariable[sensorST]){
+    if(fecha.getTime() !== ultimaFecha.getTime()){
 
-        var data_x = [];
-        var data_y = [];
-        var data_z = [];
+        ultimaFecha = new Date(datos[sensor][datos[sensor].length - 1].fecha);
+        ultimaFecha = ultimaFecha / 1000;
+        const haceDiezMinutos = ultimaFecha - 600;
 
-        for(var i = 0; i < valor[sensor].length; i++){
-            data_x.push(valor[sensor][i][0]);
-            data_y.push(valor[sensor][i][1]);
-            data_z.push(valor[sensor][i][2]);
+        var fechas = [];
+        var valores = [];
+
+        for(var i = 0; i < datos[sensor].length; i++){
+            fecha = new Date(datos[sensor][i].fecha) / 1000;
+            if(fecha >= haceDiezMinutos && fecha < ultimaFecha) {
+                fechas.push(datos[sensor][i].fecha);
+                valores.push(datos[sensor][i].datos[0]);
+            }
         }
 
-        myChart.config.data.datasets[0].data = data_x;
-        myChart.config.data.datasets[1].data = data_y;
-        myChart.config.data.datasets[2].data = data_z;
+        myChart.config.data.labels = fechas;
 
-    }else{
+        if(!uniVariable[sensor]){
 
-        myChart.config.data.datasets[0].data = valor[sensor];
+            var data_x = [];
+            var data_y = [];
+            var data_z = [];
+
+            for(var i = 0; i < valores.length; i++){
+
+                data_x.push(valores[i][0]);
+                data_y.push(valores[i][1]);
+                data_z.push(valores[i][2]);
+
+            }
+
+            myChart.config.data.datasets[0].data = data_x;
+            myChart.config.data.datasets[1].data = data_y;
+            myChart.config.data.datasets[2].data = data_z;
+
+        }else{
+
+            myChart.config.data.datasets[0].data = valores;
+
+        }
+
+        myChart.update();
 
     }
-
-    myChart.update();
 
 }
 
@@ -562,9 +662,9 @@ function actualizarGraficaClima(){
 
     myChart.config.data.labels = fechas["Termometro"];
 
-    var data_tem = valor["Termometro"];
-    var data_hum = valor["Humedad"];
-    var data_pre = valor["Barometro"];
+    var data_tem = datos["Termometro"];
+    var data_hum = datos["Humedad"];
+    var data_pre = datos["Barometro"];
 
     myChart.config.data.datasets[0].data = data_tem;
     myChart.config.data.datasets[1].data = data_hum;
@@ -606,9 +706,12 @@ async function encendidos(){
         }
     }
     document.getElementById("encendido").style.color = "green";
-    if(total === 0)
+    if(total === 0) {
         document.getElementById("encendido").style.color = "red";
-    else if(total === 1)
+        document.getElementById("activos").disabled = true;
+    }else
+        document.getElementById("activos").disabled = false;
+    if(total === 1)
         document.getElementById("encendido").innerHTML = total + " sensor se encuentra activo";
     else
         document.getElementById("encendido").innerHTML = total + " sensores se encuentran activos";
