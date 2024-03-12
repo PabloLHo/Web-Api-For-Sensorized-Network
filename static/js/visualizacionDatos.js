@@ -854,7 +854,6 @@ async function encendidos(){
 
                 var actual = new Date();
                 var ultima = new Date(data[data.length - 1].fecha);
-
                 var diferenciaMilisegundos = actual.getTime() - ultima.getTime();
                 if (todosSensores[i] === "Humedad" || todosSensores[i] === "Termometro" || todosSensores[i] === "Barometro") {
                     if (Math.abs(diferenciaMilisegundos) <= actualizacion["Clima"])
@@ -876,9 +875,7 @@ async function encendidos(){
     document.getElementById("encendido").style.color = "green";
     if(encendidos.length === 0) {
         document.getElementById("encendido").style.color = "red";
-        document.getElementById("activos").disabled = true;
-    }else
-        document.getElementById("activos").disabled = false;
+    }
     if(encendidos.length === 1)
         document.getElementById("encendido").innerHTML = encendidos.length + " sensor se encuentra activo";
     else
