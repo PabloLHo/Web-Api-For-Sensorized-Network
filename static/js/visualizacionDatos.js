@@ -1,4 +1,6 @@
 var graficas = {};
+var graficasTR = {};
+var sensorEncendido = {"Podometro": 0, "Bateria": 0,"Giroscopio": 0, "Magnetometro": 0, "Acelerometro": 0, "Proximidad": 0, "Luminosidad": 0, "Clima": 0};
 var valor;
 var datos = {"Podometro": [], "Bateria": [],"Giroscopio": [], "Magnetometro": [], "Acelerometro": [], "Proximidad": [], "Luminosidad": [], "Termometro": [], "Barometro": [], "Humedad": []};
 var sensores = ["Podometro", "Bateria", "Giroscopio", "Magnetometro", "Acelerometro", "Proximidad", "Luminosidad", "GPS", "Clima"];
@@ -95,6 +97,14 @@ function actualizarAcelerometro(){
 
         }
 
+        if(sensorEncendido[sensorST] !== 0){
+            graficaTR(sensorST);
+            document.getElementById("TR-" + sensorST).style.display = "block";
+        }else{
+            document.getElementById("TR-" + sensorST).style.display = "none";
+            graficasTR[sensorST] = null;
+        }
+
 
         giro_x = 60 + Math.abs(numero_x) * 14.5;
         giro_y = 60 + Math.abs(numero_y) * 14.5;
@@ -168,6 +178,14 @@ function actualizarGiroscopio() {
 
         }
 
+        if(sensorEncendido[sensorST] !== 0){
+            graficaTR(sensorST);
+            document.getElementById("TR-" + sensorST).style.display = "block";
+        }else{
+            document.getElementById("TR-" + sensorST).style.display = "none";
+            graficasTR[sensorST] = null;
+        }
+
         document.getElementById("actual-" + sensorST + "-x").innerHTML = numero_x.toFixed(2);
         document.getElementById("actual-" + sensorST + "-y").innerHTML = numero_y.toFixed(2);
         document.getElementById("actual-" + sensorST + "-z").innerHTML = numero_z.toFixed(2);
@@ -206,6 +224,14 @@ function actualizarMagnetometro() {
 
             actualizarGrafica(sensorST);
 
+        }
+
+        if(sensorEncendido[sensorST] !== 0){
+            graficaTR(sensorST);
+            document.getElementById("TR-" + sensorST).style.display = "block";
+        }else{
+            document.getElementById("TR-" + sensorST).style.display = "none";
+            graficasTR[sensorST] = null;
         }
 
         document.getElementById("actual-" + sensorST + "-x").innerHTML = numero_x.toFixed(2);
@@ -301,6 +327,14 @@ function actualizarLuminosidad() {
 
         }
 
+        if(sensorEncendido[sensorST] !== 0){
+            graficaTR(sensorST);
+            document.getElementById("TR-" + sensorST).style.display = "block";
+        }else{
+            document.getElementById("TR-" + sensorST).style.display = "none";
+            graficasTR[sensorST] = null;
+        }
+
         document.getElementById("actual-" + sensorST).innerHTML = actual;
 
         var textShadow1, textShadow2;
@@ -332,6 +366,14 @@ function actualizarProximidad() {
 
             actualizarGrafica(sensorST);
 
+        }
+
+        if(sensorEncendido[sensorST] !== 0){
+            graficaTR(sensorST);
+            document.getElementById("TR-" + sensorST).style.display = "block";
+        }else{
+            document.getElementById("TR-" + sensorST).style.display = "none";
+            graficasTR[sensorST] = null;
         }
 
         document.getElementById("actual-" + sensorST).innerHTML = actual;
@@ -615,12 +657,14 @@ function actualizarGrafica(sensor){
 
         var fechas = [];
         var valores = [];
-
         for(var i = 0; i < datos[sensor].length; i++){
             fecha = new Date(datos[sensor][i].fecha) / 1000;
             if(fecha >= haceDiezMinutos && fecha < ultimaFecha) {
                 fechas.push(datos[sensor][i].fecha);
-                valores.push(datos[sensor][i].datos[0]);
+                if(uniVariable[sensor])
+                    valores.push(datos[sensor][i].datos[0]);
+                else
+                    valores.push(datos[sensor][i].datos);
             }
         }
 
@@ -674,11 +718,130 @@ function actualizarGraficaClima(){
 
 }
 
+//Grafica en TR
+
+function graficaTR(sensor){
+
+    graficasTR[sensor] = null;
+
+    var data = datos[sensor];
+    var intervalo = actualizacion[sensor];
+    var fecha_inicio = sensorEncendido[sensor];
+    var datos = [];
+    var fechas = [];
+
+    for(var i = data.length - 1; i >= 0; i--){
+        var fecha = new Date(data[i].fecha);
+        if(fecha.getTime() > fecha_inicio.getTime()){
+            if(uniVariable[sensor])
+                datos.push(data[i].datos[0]);
+            else
+                datos.push(data[i].datos);
+            fechas.push(fecha);
+        }
+    }
+
+    var datasets = [];
+
+    if(uniVariable[sensor]) {
+
+        datasets = [{
+            label: sensor,
+            backgroundColor: 'rgb(' + r + ',' + g + ',' + b + ')',
+            borderColor: 'rgb(' + r + ',' + g + ',' + b + ')',
+            data: valores,
+            spanGaps: true,
+        }]
+
+    }else {
+
+        var data_x = [];
+        var data_y = [];
+        var data_z = [];
+
+        var nombre1 = "Eje X";
+        var nombre2 = "Eje Y";
+        var nombre3 = "Eje Z";
+
+        for(var i = 0; i < datos.length; i++) {
+            data_x.push(datos[i][0]);
+            data_y.push(datos[i][1]);
+            data_z.push(datos[i][2]);
+        }
+
+
+        datasets = [{
+            label: nombre1,
+            backgroundColor: 'rgb(' + r + ',' + g + ',' + b + ')',
+            borderColor: 'rgb(' + r + ',' + g + ',' + b + ')',
+            data: data_x,
+            spanGaps: true
+        },
+            {
+                label: nombre2,
+                backgroundColor: 'rgb(' + g + ',' + r + ',' + b + ')',
+                borderColor: 'rgb(' + g + ',' + r + ',' + b + ')',
+                data: data_y,
+                spanGaps: true
+            },
+            {
+                label: nombre3,
+                backgroundColor: 'rgb(' + r + ',' + b + ',' + g + ')',
+                borderColor: 'rgb(' + r + ',' + b + ',' + g + ')',
+                data: data_z,
+                spanGaps: true
+            }]
+    }
+
+    const datosGRF = {
+        labels: fechas,
+        datasets: datasets
+    };
+
+    const config = {
+      type: 'line',
+      data: datosGRF,
+      options: {
+        scales: {
+          x: {
+            type: "time",
+            title: {
+                display: true,
+                text: 'Fecha recogida de datos'
+            },
+            time: {
+                unit: 'second',
+                displayFormats: {
+                        second: 'h:mm:ss a' // Formato de visualización del tiempo en el eje x
+                },
+                stepSize: actualizacion[sensor] / 1000
+            },
+            reverse: true,
+            ticks: {
+                display: true,
+                source: 'auto',
+                autoSkipPadding: 10
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: unidades[sensor]
+            }
+          }
+        }
+      },
+    };
+
+    var myChart = new Chart(document.getElementById("grafica-TR" + sensor), config);
+    myChart.canvas.parentNode.style.width = '100%';
+    graficasTR[sensor] = myChart;
+
+}
+
 //Control de los sensores encendidos
 
 async function encendidos(){
-
-    var total = 0;
 
     for(var i = 0; i < todosSensores.length; i++){
         sensorST = todosSensores[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -695,10 +858,15 @@ async function encendidos(){
                 var diferenciaMilisegundos = actual.getTime() - ultima.getTime();
                 if (todosSensores[i] === "Humedad" || todosSensores[i] === "Termometro" || todosSensores[i] === "Barometro") {
                     if (Math.abs(diferenciaMilisegundos) <= actualizacion["Clima"])
-                        total++;
+                        sensorEncendido["Clima"] = actual.getTime();
+                    else
+                        sensorEncendido["Clima"] = 0;
                 } else {
                     if (Math.abs(diferenciaMilisegundos) <= actualizacion[todosSensores[i]])
-                        total++;
+                        sensorEncendido[todosSensores[i]] = actual.getTime();
+                    else
+                        sensorEncendido[todosSensores[i]] = 0;
+
                 }
             }
         } catch (error) {
@@ -706,13 +874,13 @@ async function encendidos(){
         }
     }
     document.getElementById("encendido").style.color = "green";
-    if(total === 0) {
+    if(encendidos.length === 0) {
         document.getElementById("encendido").style.color = "red";
         document.getElementById("activos").disabled = true;
     }else
         document.getElementById("activos").disabled = false;
-    if(total === 1)
-        document.getElementById("encendido").innerHTML = total + " sensor se encuentra activo";
+    if(encendidos.length === 1)
+        document.getElementById("encendido").innerHTML = encendidos.length + " sensor se encuentra activo";
     else
-        document.getElementById("encendido").innerHTML = total + " sensores se encuentran activos";
+        document.getElementById("encendido").innerHTML = encendidos.length + " sensores se encuentran activos";
 }
