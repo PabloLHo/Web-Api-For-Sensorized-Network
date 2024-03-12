@@ -6,7 +6,7 @@ from faunadb.client import FaunaClient
 
 from Models.sensor import Sensor
 
-fauna_client = FaunaClient(secret="fnAE-czWhAAAzJpuciEYP-P-UZlSDIp4blaPP4KT")
+fauna_client = FaunaClient(secret="fnAFcUzpExAA0CXbawBwt4eI6UuOYdn54uM5F6HA")
 
 app = Flask(__name__)
 CORS(app)
