@@ -7,21 +7,21 @@
     justify-content: center;
 	display: flex;
     align-items: center;
-    transform: rotateX(120deg);
+    transform: rotateX(0deg);
 }
 
 .total-y{
     justify-content: center;
 	display: flex;
     align-items: center;
-    transform: rotateY(120deg);
+    transform: rotateY(0deg);
 }
 
 .total-z{
     justify-content: center;
 	display: flex;
     align-items: center;
-    transform: rotateZ(45deg);
+    transform: rotateZ(0deg);
 }
 
 .pelicula{

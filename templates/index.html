@@ -35,7 +35,6 @@
                                 <li><input type="submit" class="dropdown-item" name="sensor" value="GPS"></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><input type="submit" class="dropdown-item" name="sensor" value="Todos"></li>
-                                <li><input type="submit" class="dropdown-item" name="sensor" value="Activos" disabled></li>
                             </form>
                         </ul>
                     </li>
@@ -111,46 +110,6 @@
     <script src="static/js/vanilla-zoom.js"></script>
     <script src="static/js/theme.js"></script>
 
-    <script>
-        async function encendidos(){
-            var sensores = ["Podometro", "Bateria", "Giroscopio", "Magnetometro", "Acelerometro", "Proximidad", "Luminosidad", "GPS", "Barometro", "Termometro", "Humedad"];
-            var actualizacion = {"Podometro": 90000, "Bateria": 120000,"Giroscopio": 30000, "Magnetometro": 60000, "Acelerometro": 15000, "Proximidad": 15000, "Luminosidad": 30000,"GPS": 90000, "Clima": 600000};
-
-            var total = 0;
-
-            for(var i = 0; i < sensores.length; i++){
-
-                try {
-                    var data = await $.ajax({
-                        url: '/' + sensores[i],
-                        type: 'GET'
-                    });
-                    if(data.length > 0) {
-
-                        var actual = new Date();
-                        var ultima = new Date(data[data.length - 1].fecha);
-
-                        var diferenciaMilisegundos = actual.getTime() - ultima.getTime();
-                        if (sensores[i] === "Humedad" || sensores[i] === "Termometro" || sensores[i] === "Barometro") {
-                            if (Math.abs(diferenciaMilisegundos) <= actualizacion["Clima"])
-                                total++;
-                        } else {
-                            if (Math.abs(diferenciaMilisegundos) <= actualizacion[sensores[i]])
-                                total++;
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            }
-
-            document.getElementById("activos").disabled = total === 0;
-
-        }
-
-        window.onload = encendidos;
-        window.setInterval(encendidos, 2000);
-    </script>
 </body>
 
 </html>

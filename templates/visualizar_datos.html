@@ -67,7 +67,6 @@
                                     <li><input type="submit" class="dropdown-item" name="sensor" value="GPS"></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><input type="submit" class="dropdown-item" name="sensor" value="Todos"></li>
-                                    <li><input id="activos" type="submit" class="dropdown-item" name="sensor" value="Activos" disabled></li>
                                 </form>
                             </ul>
                         </li>
@@ -174,13 +173,13 @@
                             </div>
                         </div>
                     </div>
-                    <div id="TR-Acelerometro" class="col-lg-10 col-xl-10">
+                    <div id="TR-Acelerometro" class="col-lg-10 col-xl-10" style="display: none">
                         <div class="card shadow mb-4">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h6 class="text-primary fw-bold m-0">Aceleración del dispositivo en tiempo real</h6>
                             </div>
                             <div class="card-body">
-                                <div class="chart-area"><canvas id="grafica-Acelerometro"></canvas></div>
+                                <div class="chart-area"><canvas id="grafica-TR-Acelerometro"></canvas></div>
                             </div>
                         </div>
                     </div>
@@ -247,7 +246,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="TR-Clima" class="col-lg-10 col-xl-10">
+                    <div id="TR-Clima" class="col-lg-10 col-xl-10" style="display: none">
                         <div class="card shadow mb-4">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h6 class="text-primary fw-bold m-0">Clima en tiempo real</h6>
@@ -399,7 +398,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="TR-Giroscopio" class="col-lg-10 col-xl-10">
+                    <div id="TR-Giroscopio" class="col-lg-10 col-xl-10" style="display: none">
                         <div class="card shadow mb-4">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h6 class="text-primary fw-bold m-0">Rotación del dispositivo en tiempo real</h6>
@@ -454,7 +453,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="TR-Magnetometro" class="col-lg-10 col-xl-10">
+                    <div id="TR-Magnetometro" class="col-lg-10 col-xl-10" style="display: none">
                         <div class="card shadow mb-4">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h6 class="text-primary fw-bold m-0">Fuerza del campo magnético en tiempo real</h6>
@@ -553,7 +552,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="TR-Proximidad" class="col-lg-10 col-xl-10">
+                    <div id="TR-Proximidad" class="col-lg-10 col-xl-10" style="display: none">
                         <div class="card shadow mb-4">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h6 class="text-primary fw-bold m-0">Proximidad en tiempo real</h6>
@@ -599,7 +598,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="TR-Luminosidad" class="col-lg-10 col-xl-10">
+                    <div id="TR-Luminosidad" class="col-lg-10 col-xl-10" style="display: none">
                         <div class="card shadow mb-4">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h6 class="text-primary fw-bold m-0">Luminosidad en tiempo real</h6>

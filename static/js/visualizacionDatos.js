@@ -16,7 +16,7 @@ function onload() {
 
     encendidos();
 
-    window.setInterval(encendidos,10000);
+    window.setInterval(encendidos,2000);
 
     if(valor === "Batería")
         document.getElementById("indicadorBateria").style.display = "none";
@@ -78,44 +78,46 @@ function actualizarAcelerometro(){
 
     var data = obtenerDatos(sensorST);
     data.then((valor) => {
-        var actual = valor[valor.length - 1].datos;
+        if(valor.length > 0) {
+            var actual = valor[valor.length - 1].datos;
 
-        var numero_x = actual[0];
-        var numero_y = actual[1];
-        var numero_z = actual[2];
+            var numero_x = actual[0];
+            var numero_y = actual[1];
+            var numero_z = actual[2];
 
-        guardarDatos(sensorST, valor);
+            guardarDatos(sensorST, valor);
 
-        if(actualizado[sensorST]){
+            if (actualizado[sensorST]) {
 
-            actualizado[sensorST] = !actualizado[sensorST];
-            preparacionDatos(sensorST);
+                actualizado[sensorST] = !actualizado[sensorST];
+                preparacionDatos(sensorST);
 
-        }else{
+            } else {
 
-            actualizarGrafica(sensorST);
+                actualizarGrafica(sensorST);
 
+            }
+
+            if (sensorEncendido[sensorST] !== 0) {
+                document.getElementById("TR-" + sensorST).style.display = "block";
+                graficaTR(sensorST);
+            } else {
+                document.getElementById("TR-" + sensorST).style.display = "none";
+                graficasTR[sensorST] = null;
+            }
+
+
+            giro_x = 60 + Math.abs(numero_x) * 14.5;
+            giro_y = 60 + Math.abs(numero_y) * 14.5;
+            giro_z = 60 + Math.abs(numero_z) * 14.5;
+
+            document.getElementById("actual-" + sensorST + "-x").innerHTML = numero_x.toFixed(2);
+            document.getElementById("actual-" + sensorST + "-y").innerHTML = numero_y.toFixed(2);
+            document.getElementById("actual-" + sensorST + "-z").innerHTML = numero_z.toFixed(2);
+            document.getElementById("dash").style.transform = "rotate(" + giro_x + "deg)";
+            document.getElementById("dash-y").style.transform = "rotate(" + giro_y + "deg)";
+            document.getElementById("dash-z").style.transform = "rotate(" + giro_z + "deg)";
         }
-
-        if(sensorEncendido[sensorST] !== 0){
-            graficaTR(sensorST);
-            document.getElementById("TR-" + sensorST).style.display = "block";
-        }else{
-            document.getElementById("TR-" + sensorST).style.display = "none";
-            graficasTR[sensorST] = null;
-        }
-
-
-        giro_x = 60 + Math.abs(numero_x) * 14.5;
-        giro_y = 60 + Math.abs(numero_y) * 14.5;
-        giro_z = 60 + Math.abs(numero_z) * 14.5;
-
-        document.getElementById("actual-" + sensorST + "-x").innerHTML = numero_x.toFixed(2);
-        document.getElementById("actual-" + sensorST + "-y").innerHTML = numero_y.toFixed(2);
-        document.getElementById("actual-" + sensorST + "-z").innerHTML = numero_z.toFixed(2);
-        document.getElementById("dash").style.transform = "rotate(" + giro_x + "deg)";
-        document.getElementById("dash-y").style.transform = "rotate(" + giro_y + "deg)";
-        document.getElementById("dash-z").style.transform = "rotate(" + giro_z + "deg)";
     });
 
 }
@@ -127,29 +129,31 @@ function actualizarBateria() {
 
 
     data.then((valor) => {
-        var actual = valor[valor.length - 1].datos;
-        var bateria = actual[0];
+        if(valor.length > 0) {
+            var actual = valor[valor.length - 1].datos;
+            var bateria = actual[0];
 
-        guardarDatos(sensorST, valor);
+            guardarDatos(sensorST, valor);
 
-        if(actualizado[sensorST]){
+            if (actualizado[sensorST]) {
 
-            actualizado[sensorST] = !actualizado[sensorST];
-            preparacionDatos(sensorST);
+                actualizado[sensorST] = !actualizado[sensorST];
+                preparacionDatos(sensorST);
 
-        }else{
+            } else {
 
-            actualizarGrafica(sensorST);
+                actualizarGrafica(sensorST);
 
+            }
+
+            var root = document.documentElement;
+            root.style.setProperty('--carga', bateria + '%');
+
+            if (bateria > 40)
+                root.style.setProperty('--color-carga', "lime");
+            else
+                root.style.setProperty('--color-carga', "orange");
         }
-
-        var root = document.documentElement;
-        root.style.setProperty('--carga', bateria + '%');
-
-        if (bateria > 40)
-            root.style.setProperty('--color-carga', "lime");
-        else
-            root.style.setProperty('--color-carga', "orange");
     });
 }
 
@@ -157,47 +161,50 @@ function actualizarGiroscopio() {
 
     var sensorST = "Giroscopio";
     var data = obtenerDatos(sensorST);
+    console.log("Actualizando " + sensorST);
 
     data.then((valor) => {
-        var actual = valor[valor.length - 1].datos;
+        if(valor.length > 0) {
+            var actual = valor[valor.length - 1].datos;
 
-        var numero_x = actual[0] * 180 / Math.PI;
-        var numero_y = actual[1] * 180 / Math.PI;
-        var numero_z = actual[2] * 180 / Math.PI;
+            var numero_x = actual[0] * 180 / Math.PI;
+            var numero_y = actual[1] * 180 / Math.PI;
+            var numero_z = actual[2] * 180 / Math.PI;
 
-        guardarDatos(sensorST, valor);
+            guardarDatos(sensorST, valor);
 
-        if(actualizado[sensorST]){
+            if (actualizado[sensorST]) {
 
-            actualizado[sensorST] = !actualizado[sensorST];
-            preparacionDatos(sensorST);
+                actualizado[sensorST] = !actualizado[sensorST];
+                preparacionDatos(sensorST);
 
-        }else{
+            } else {
 
-            actualizarGrafica(sensorST);
+                actualizarGrafica(sensorST);
 
+            }
+
+            if (sensorEncendido[sensorST] !== 0) {
+                graficaTR(sensorST);
+                document.getElementById("TR-" + sensorST).style.display = "block";
+            } else {
+                document.getElementById("TR-" + sensorST).style.display = "none";
+                graficasTR[sensorST] = null;
+            }
+
+            document.getElementById("actual-" + sensorST + "-x").innerHTML = numero_x.toFixed(2);
+            document.getElementById("actual-" + sensorST + "-y").innerHTML = numero_y.toFixed(2);
+            document.getElementById("actual-" + sensorST + "-z").innerHTML = numero_z.toFixed(2);
+
+            var elementoX = document.querySelector('.total-x');
+            elementoX.style.transform = 'rotateX(' + numero_x + 'deg)';
+
+            var elementoY = document.querySelector('.total-y');
+            elementoY.style.transform = 'rotateY(' + numero_y + 'deg)';
+
+            var elementoZ = document.querySelector('.total-z');
+            elementoZ.style.transform = 'rotateZ(' + numero_z + 'deg)';
         }
-
-        if(sensorEncendido[sensorST] !== 0){
-            graficaTR(sensorST);
-            document.getElementById("TR-" + sensorST).style.display = "block";
-        }else{
-            document.getElementById("TR-" + sensorST).style.display = "none";
-            graficasTR[sensorST] = null;
-        }
-
-        document.getElementById("actual-" + sensorST + "-x").innerHTML = numero_x.toFixed(2);
-        document.getElementById("actual-" + sensorST + "-y").innerHTML = numero_y.toFixed(2);
-        document.getElementById("actual-" + sensorST + "-z").innerHTML = numero_z.toFixed(2);
-
-        var elementoX = document.querySelector('.total-x');
-        elementoX.style.transform = 'rotateX(' + numero_x + 'deg)';
-
-        var elementoY = document.querySelector('.total-y');
-        elementoY.style.transform = 'rotateY(' + numero_y + 'deg)';
-
-        var elementoZ = document.querySelector('.total-z');
-        elementoZ.style.transform = 'rotateZ(' + numero_z + 'deg)';
     });
 }
 
@@ -207,44 +214,46 @@ function actualizarMagnetometro() {
     var data = obtenerDatos(sensorST);
 
     data.then((valor) => {
-        var actual = valor[valor.length - 1].datos;
+        if(valor.length > 0) {
+            var actual = valor[valor.length - 1].datos;
 
-        var numero_x = actual[0];
-        var numero_y = actual[1];
-        var numero_z = actual[2];
+            var numero_x = actual[0];
+            var numero_y = actual[1];
+            var numero_z = actual[2];
 
-        guardarDatos(sensorST, valor);
+            guardarDatos(sensorST, valor);
 
-        if(actualizado[sensorST]){
+            if (actualizado[sensorST]) {
 
-            actualizado[sensorST] = !actualizado[sensorST];
-            preparacionDatos(sensorST);
+                actualizado[sensorST] = !actualizado[sensorST];
+                preparacionDatos(sensorST);
 
-        }else{
+            } else {
 
-            actualizarGrafica(sensorST);
+                actualizarGrafica(sensorST);
 
+            }
+
+            if (sensorEncendido[sensorST] !== 0) {
+                graficaTR(sensorST);
+                document.getElementById("TR-" + sensorST).style.display = "block";
+            } else {
+                document.getElementById("TR-" + sensorST).style.display = "none";
+                graficasTR[sensorST] = null;
+            }
+
+            document.getElementById("actual-" + sensorST + "-x").innerHTML = numero_x.toFixed(2);
+            document.getElementById("actual-" + sensorST + "-y").innerHTML = numero_y.toFixed(2);
+            document.getElementById("actual-" + sensorST + "-z").innerHTML = numero_z.toFixed(2);
+
+            var absoluto = Math.sqrt(Math.pow(numero_x, 2) + Math.pow(numero_y, 2) + Math.pow(numero_z, 2));
+
+            document.getElementById("text-magnetometro").innerHTML = absoluto.toFixed(2) + "&microT";
+
+            var radianes = Math.atan2(actual[1], actual[0]);
+            var grados = radianes * 180 / Math.PI;
+            document.getElementById("img_brujula").style.transform = "rotate(" + grados + "deg)";
         }
-
-        if(sensorEncendido[sensorST] !== 0){
-            graficaTR(sensorST);
-            document.getElementById("TR-" + sensorST).style.display = "block";
-        }else{
-            document.getElementById("TR-" + sensorST).style.display = "none";
-            graficasTR[sensorST] = null;
-        }
-
-        document.getElementById("actual-" + sensorST + "-x").innerHTML = numero_x.toFixed(2);
-        document.getElementById("actual-" + sensorST + "-y").innerHTML = numero_y.toFixed(2);
-        document.getElementById("actual-" + sensorST + "-z").innerHTML = numero_z.toFixed(2);
-
-        var absoluto = Math.sqrt(Math.pow(numero_x, 2) + Math.pow(numero_y, 2) + Math.pow(numero_z, 2));
-
-        document.getElementById("text-magnetometro").innerHTML = absoluto.toFixed(2) + "&microT";
-
-        var radianes = Math.atan2(actual[1], actual[0]);
-        var grados = radianes * 180 / Math.PI;
-        document.getElementById("img_brujula").style.transform = "rotate(" + grados + "deg)";
     });
 }
 
@@ -258,11 +267,12 @@ function actualizarClima() {
     var dataPre = obtenerDatos("Barometro");
 
     dataTemp.then((valor) => {
+        if(valor.length > 0) {
+            var actual = valor[valor.length - 1].datos;
+            document.getElementById("actual-Temperatura").innerHTML = actual;
 
-        var actual = valor[valor.length - 1].datos;
-        document.getElementById("actual-Temperatura").innerHTML = actual;
-
-        guardarDatos("Termometro", valor);
+            guardarDatos("Termometro", valor);
+        }
 
     });
 
@@ -294,13 +304,14 @@ function actualizarPodometro() {
     var data = obtenerDatos(sensorST);
 
     data.then((valor) => {
+        if(valor.length > 0) {
+            var actual = valor[valor.length - 1].datos;
 
-        var actual = valor[valor.length - 1].datos;
+            document.getElementById("actual-" + sensorST).innerHTML = actual;
+            document.getElementById("actual-distancia").innerHTML = actual * 0.7;
 
-        document.getElementById("actual-" + sensorST).innerHTML = actual;
-        document.getElementById("actual-distancia").innerHTML = actual * 0.7;
-
-        guardarDatos(sensorST, valor);
+            guardarDatos(sensorST, valor);
+        }
 
     });
 }
@@ -311,38 +322,39 @@ function actualizarLuminosidad() {
     var data = obtenerDatos(sensorST);
 
     data.then((valor) => {
+        if(valor.length > 0) {
+            var actual = valor[valor.length - 1].datos[0];
 
-        var actual = valor[valor.length - 1].datos[0];
+            guardarDatos(sensorST, valor);
 
-        guardarDatos(sensorST, valor);
+            if (actualizado[sensorST]) {
 
-        if(actualizado[sensorST]){
+                actualizado[sensorST] = !actualizado[sensorST];
+                preparacionDatos(sensorST);
 
-            actualizado[sensorST] = !actualizado[sensorST];
-            preparacionDatos(sensorST);
+            } else {
 
-        }else{
+                actualizarGrafica(sensorST);
 
-            actualizarGrafica(sensorST);
+            }
 
+            if (sensorEncendido[sensorST] !== 0) {
+                graficaTR(sensorST);
+                document.getElementById("TR-" + sensorST).style.display = "block";
+            } else {
+                document.getElementById("TR-" + sensorST).style.display = "none";
+                graficasTR[sensorST] = null;
+            }
+
+            document.getElementById("actual-" + sensorST).innerHTML = actual;
+
+            var textShadow1, textShadow2;
+            textShadow1 = '#fff 0 0 ' + (actual / 20000 * 2) + 'px'; // Sombra más débil
+            textShadow2 = '#fcffbb 0 0 ' + (actual / 20000 * 5) + 'px'; // Sombra más fuerte
+
+            var lightElement = document.getElementById('light');
+            lightElement.style.textShadow = textShadow1 + ', ' + textShadow2;
         }
-
-        if(sensorEncendido[sensorST] !== 0){
-            graficaTR(sensorST);
-            document.getElementById("TR-" + sensorST).style.display = "block";
-        }else{
-            document.getElementById("TR-" + sensorST).style.display = "none";
-            graficasTR[sensorST] = null;
-        }
-
-        document.getElementById("actual-" + sensorST).innerHTML = actual;
-
-        var textShadow1, textShadow2;
-        textShadow1 = '#fff 0 0 ' + (actual / 20000 * 2) + 'px'; // Sombra más débil
-        textShadow2 = '#fcffbb 0 0 ' + (actual / 20000 * 5) + 'px'; // Sombra más fuerte
-
-        var lightElement = document.getElementById('light');
-        lightElement.style.textShadow = textShadow1 + ', ' + textShadow2;
     });
 }
 
@@ -352,36 +364,37 @@ function actualizarProximidad() {
     var data = obtenerDatos(sensorST);
 
     data.then((valor) => {
+        if(valor.length > 0) {
+            var actual = valor[valor.length - 1].datos;
 
-        var actual = valor[valor.length - 1].datos;
+            guardarDatos(sensorST, valor);
 
-        guardarDatos(sensorST, valor);
+            if (actualizado[sensorST]) {
 
-        if(actualizado[sensorST]){
+                actualizado[sensorST] = !actualizado[sensorST];
+                preparacionDatos(sensorST);
 
-            actualizado[sensorST] = !actualizado[sensorST];
-            preparacionDatos(sensorST);
+            } else {
 
-        }else{
+                actualizarGrafica(sensorST);
 
-            actualizarGrafica(sensorST);
+            }
 
-        }
+            if (sensorEncendido[sensorST] !== 0) {
+                graficaTR(sensorST);
+                document.getElementById("TR-" + sensorST).style.display = "block";
+            } else {
+                document.getElementById("TR-" + sensorST).style.display = "none";
+                graficasTR[sensorST] = null;
+            }
 
-        if(sensorEncendido[sensorST] !== 0){
-            graficaTR(sensorST);
-            document.getElementById("TR-" + sensorST).style.display = "block";
-        }else{
-            document.getElementById("TR-" + sensorST).style.display = "none";
-            graficasTR[sensorST] = null;
-        }
+            document.getElementById("actual-" + sensorST).innerHTML = actual;
 
-        document.getElementById("actual-" + sensorST).innerHTML = actual;
-
-        if (actual < 3) {
-            distancia = 1;
-        } else {
-            distancia = 0;
+            if (actual < 3) {
+                distancia = 1;
+            } else {
+                distancia = 0;
+            }
         }
     });
 }
@@ -392,39 +405,40 @@ function actualizarGPS() {
     var data = obtenerDatos(sensorST);
 
     data.then((valor) => {
+        if(valor.length > 0) {
+            map.removeLayer(miPosicion);
 
-        map.removeLayer(miPosicion);
+            const positionFeature = new ol.Feature();
 
-        const positionFeature = new ol.Feature();
+            var coordinates = [valor[valor.length - 1].datos[1], valor[valor.length - 1].datos[0]];
 
-        var coordinates = [valor[valor.length - 1].datos[1], valor[valor.length - 1].datos[0]];
-
-        positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
-        positionFeature.setStyle(new ol.style.Style({
-            image: new ol.style.Circle({
-                radius: 7,
-                fill: new ol.style.Fill({
-                    color: '#3399CC',
+            positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
+            positionFeature.setStyle(new ol.style.Style({
+                image: new ol.style.Circle({
+                    radius: 7,
+                    fill: new ol.style.Fill({
+                        color: '#3399CC',
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: '#fff',
+                        width: 2,
+                    }),
                 }),
-                stroke: new ol.style.Stroke({
-                    color: '#fff',
-                    width: 2,
+            }));
+
+            map.getView().setCenter(coordinates);
+
+            miPosicion = new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    features: [positionFeature],
                 }),
-            }),
-        }));
+            });
 
-        map.getView().setCenter(coordinates);
+            map.addLayer(miPosicion);
 
-        miPosicion = new ol.layer.Vector({
-            source: new ol.source.Vector({
-                features: [positionFeature],
-            }),
-        });
-
-        map.addLayer(miPosicion);
-
-        document.getElementById("actual-GPS-x").innerHTML = coordinates[0];
-        document.getElementById("actual-GPS-y").innerHTML = coordinates[1];
+            document.getElementById("actual-GPS-x").innerHTML = coordinates[0];
+            document.getElementById("actual-GPS-y").innerHTML = coordinates[1];
+        }
     });
 }
 
@@ -615,7 +629,6 @@ function creacionGrafica(data, sensorST){
                 },
                 stepSize: actualizacion[sensorST] / 1000
             },
-            reverse: true,
             ticks: {
                 display: true,
                 source: 'auto',
@@ -725,23 +738,25 @@ function graficaTR(sensor){
     graficasTR[sensor] = null;
 
     var data = datos[sensor];
-    var intervalo = actualizacion[sensor];
     var fecha_inicio = sensorEncendido[sensor];
-    var datos = [];
+    var valores = [];
     var fechas = [];
 
     for(var i = data.length - 1; i >= 0; i--){
         var fecha = new Date(data[i].fecha);
-        if(fecha.getTime() > fecha_inicio.getTime()){
+        if(fecha.getTime() > fecha_inicio){
             if(uniVariable[sensor])
-                datos.push(data[i].datos[0]);
+                valores.push(data[i].datos[0]);
             else
-                datos.push(data[i].datos);
+                valores.push(data[i].datos);
             fechas.push(fecha);
         }
     }
 
     var datasets = [];
+    var r = 0;
+    var g = 255;
+    var b = 0;
 
     if(uniVariable[sensor]) {
 
@@ -763,10 +778,10 @@ function graficaTR(sensor){
         var nombre2 = "Eje Y";
         var nombre3 = "Eje Z";
 
-        for(var i = 0; i < datos.length; i++) {
-            data_x.push(datos[i][0]);
-            data_y.push(datos[i][1]);
-            data_z.push(datos[i][2]);
+        for(var i = 0; i < valores.length; i++) {
+            data_x.push(valores[i][0]);
+            data_y.push(valores[i][1]);
+            data_z.push(valores[i][2]);
         }
 
 
@@ -832,8 +847,8 @@ function graficaTR(sensor){
         }
       },
     };
-
-    var myChart = new Chart(document.getElementById("grafica-TR" + sensor), config);
+    console.log(sensor);
+    var myChart = new Chart(document.getElementById("grafica-TR-" + sensor), config);
     myChart.canvas.parentNode.style.width = '100%';
     graficasTR[sensor] = myChart;
 
@@ -843,6 +858,7 @@ function graficaTR(sensor){
 
 async function encendidos(){
 
+    var total = 0;
     for(var i = 0; i < todosSensores.length; i++){
         sensorST = todosSensores[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         try {
@@ -856,14 +872,16 @@ async function encendidos(){
                 var ultima = new Date(data[data.length - 1].fecha);
                 var diferenciaMilisegundos = actual.getTime() - ultima.getTime();
                 if (todosSensores[i] === "Humedad" || todosSensores[i] === "Termometro" || todosSensores[i] === "Barometro") {
-                    if (Math.abs(diferenciaMilisegundos) <= actualizacion["Clima"])
+                    if (Math.abs(diferenciaMilisegundos) <= (actualizacion["Clima"] + 5000 )) {
                         sensorEncendido["Clima"] = actual.getTime();
-                    else
+                        total++;
+                    }else
                         sensorEncendido["Clima"] = 0;
                 } else {
-                    if (Math.abs(diferenciaMilisegundos) <= actualizacion[todosSensores[i]])
+                    if (Math.abs(diferenciaMilisegundos) <= (actualizacion[todosSensores[i]] + 5000)) {
                         sensorEncendido[todosSensores[i]] = actual.getTime();
-                    else
+                        total++;
+                    }else
                         sensorEncendido[todosSensores[i]] = 0;
 
                 }
@@ -872,12 +890,13 @@ async function encendidos(){
             console.error('Error:', error);
         }
     }
+
     document.getElementById("encendido").style.color = "green";
-    if(encendidos.length === 0) {
+    if(total === 0) {
         document.getElementById("encendido").style.color = "red";
     }
-    if(encendidos.length === 1)
-        document.getElementById("encendido").innerHTML = encendidos.length + " sensor se encuentra activo";
+    if(total === 1)
+        document.getElementById("encendido").innerHTML = total + " sensor se encuentra activo";
     else
-        document.getElementById("encendido").innerHTML = encendidos.length + " sensores se encuentran activos";
+        document.getElementById("encendido").innerHTML = total + " sensores se encuentran activos";
 }
