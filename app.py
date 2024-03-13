@@ -15,7 +15,8 @@ sensor = ""
 sensores = []
 
 
-#Ruta base: página principal
+
+# Ruta base: página principal
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('index.html')
@@ -32,20 +33,21 @@ def elegir_futuro():
 
 
 
-@app.route('/<sensor>', methods=['POST','GET'])
+
+@app.route('/<sensor>', methods=['POST', 'GET'])
 async def datosSensor(sensor):
     try:
         if request.method == 'POST':
             data = request.get_json()
-            nuevo = Sensor(ast.literal_eval(data['datos']),data['fecha'])
+            nuevo = Sensor(ast.literal_eval(data['datos']), data['fecha'])
 
             fauna_client.query(
                 q.create(
                     q.collection(str(sensor)),
-                {
+                    {
                         "data": {
-                            "datos" : nuevo.getDatos(),
-                            "fecha" : nuevo.getFecha()
+                            "datos": nuevo.getDatos(),
+                            "fecha": nuevo.getFecha()
                         },
                     }
                 )
@@ -55,15 +57,24 @@ async def datosSensor(sensor):
 
         elif request.method == 'GET':
             result = fauna_client.query(
-                q.map_(
-                    q.lambda_("X", q.get(q.var("X"))),
-                    q.paginate(q.documents(q.collection(str(sensor))))
+                q.let(
+                    {
+                        "paginate_options": 5000
+                    },
+                    q.map_(
+                        q.lambda_("X", q.get(q.var("X"))),
+                        q.paginate(
+                            q.documents(q.collection(str(sensor))),
+                            q.var("paginate_options")
+                        )
+                    )
                 )
             )
+
             data = [item["data"] for item in result["data"]]
             return jsonify(data), 200
     except Exception as e:
         return f"An Error Occured: {e}"
 
-if __name__ == '__main__' :
+if __name__ == '__main__':
     app.run(debug=True)
