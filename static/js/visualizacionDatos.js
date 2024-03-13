@@ -20,6 +20,10 @@ function onload() {
 
     if(valor === "Batería")
         document.getElementById("indicadorBateria").style.display = "none";
+    else if(valor !== "Todos") {
+        actualizarMiniBateria();
+        window.setInterval(window["actualizarMiniBateria"], actualizacion["Bateria"]);
+    }
 
     if (valor === "Todos") {
 
@@ -79,6 +83,7 @@ function actualizarAcelerometro(){
     var data = obtenerDatos(sensorST);
     data.then((valor) => {
         if(valor.length > 0) {
+
             var actual = valor[valor.length - 1].datos;
 
             var numero_x = actual[0];
@@ -164,6 +169,7 @@ function actualizarGiroscopio() {
     console.log("Actualizando " + sensorST);
 
     data.then((valor) => {
+        console.log(valor);
         if(valor.length > 0) {
             var actual = valor[valor.length - 1].datos;
 
@@ -186,9 +192,8 @@ function actualizarGiroscopio() {
 
             if (sensorEncendido[sensorST] !== 0) {
                 graficaTR(sensorST);
-                document.getElementById("TR-" + sensorST).style.display = "block";
-            } else {
-                document.getElementById("TR-" + sensorST).style.display = "none";
+            } else if(graficasTR[sensorST]) {
+                graficasTR[sensorST].destroy();
                 graficasTR[sensorST] = null;
             }
 
@@ -438,6 +443,27 @@ function actualizarGPS() {
 
             document.getElementById("actual-GPS-x").innerHTML = coordinates[0];
             document.getElementById("actual-GPS-y").innerHTML = coordinates[1];
+        }
+    });
+}
+
+function actualizarMiniBateria(){
+
+    var sensorST = "Bateria";
+    var data = obtenerDatos(sensorST);
+
+    data.then((valor) => {
+        if(valor.length > 0) {
+            var actual = valor[valor.length - 1].datos;
+            var bateria = actual[0];
+
+            var root = document.documentElement;
+            root.style.setProperty('--carga', bateria + '%');
+
+            if (bateria > 40)
+                root.style.setProperty('--color-carga', "lime");
+            else
+                root.style.setProperty('--color-carga', "orange");
         }
     });
 }
@@ -735,7 +761,10 @@ function actualizarGraficaClima(){
 
 function graficaTR(sensor){
 
-    graficasTR[sensor] = null;
+    if (graficasTR[sensor]) {
+        graficasTR[sensor].destroy();
+        graficasTR[sensor] = null;
+    }
 
     var data = datos[sensor];
     var fecha_inicio = sensorEncendido[sensor];
@@ -847,7 +876,7 @@ function graficaTR(sensor){
         }
       },
     };
-    console.log(sensor);
+
     var myChart = new Chart(document.getElementById("grafica-TR-" + sensor), config);
     myChart.canvas.parentNode.style.width = '100%';
     graficasTR[sensor] = myChart;
@@ -872,14 +901,16 @@ async function encendidos(){
                 var ultima = new Date(data[data.length - 1].fecha);
                 var diferenciaMilisegundos = actual.getTime() - ultima.getTime();
                 if (todosSensores[i] === "Humedad" || todosSensores[i] === "Termometro" || todosSensores[i] === "Barometro") {
-                    if (Math.abs(diferenciaMilisegundos) <= (actualizacion["Clima"] + 5000 )) {
-                        sensorEncendido["Clima"] = actual.getTime();
+                    if (Math.abs(diferenciaMilisegundos) <= (actualizacion["Clima"] + 10000 )) {
+                        if(sensorEncendido["Clima"] !== 0)
+                            sensorEncendido["Clima"] = actual.getTime();
                         total++;
                     }else
                         sensorEncendido["Clima"] = 0;
                 } else {
-                    if (Math.abs(diferenciaMilisegundos) <= (actualizacion[todosSensores[i]] + 5000)) {
-                        sensorEncendido[todosSensores[i]] = actual.getTime();
+                    if (Math.abs(diferenciaMilisegundos) <= (actualizacion[todosSensores[i]] + 10000)) {
+                        if(sensorEncendido[todosSensores[i]] === 0)
+                            sensorEncendido[todosSensores[i]] = actual.getTime();
                         total++;
                     }else
                         sensorEncendido[todosSensores[i]] = 0;
