@@ -98,8 +98,8 @@ function actualizarAcelerometro(){
                 preparacionDatos(sensorST);
 
             } else {
-
-                actualizarGrafica(sensorST);
+                console.log("hola");
+                //actualizarGrafica(sensorST);
 
             }
 
@@ -235,7 +235,7 @@ function actualizarMagnetometro() {
 
             } else {
 
-                actualizarGrafica(sensorST);
+               actualizarGrafica(sensorST);
 
             }
 
@@ -550,18 +550,6 @@ function preparacionClima(){
 
 function preparacionDatos(sensorST){
 
-    var ultimaFecha = new Date(datos[sensorST][datos[sensorST].length - 1].fecha);
-    ultimaFecha = ultimaFecha / 1000;
-    const haceDiezMinutos = ultimaFecha - 600;
-
-    var nuevosDatos = [];
-
-    for(var i = 0; i < datos[sensorST].length; i++){
-        var fecha = new Date(datos[sensorST][i].fecha) / 1000;
-        if(fecha >= haceDiezMinutos && fecha < ultimaFecha)
-            nuevosDatos.push(datos[sensorST][i]);
-    }
-
 
     var r = 0;
     var g = 255;
@@ -594,11 +582,17 @@ function preparacionDatos(sensorST){
         var nombre2 = "Eje Y";
         var nombre3 = "Eje Z";
 
-        for(var i = nuevosDatos.length - 1; i >= 0; i--) {
-            fechas.push(nuevosDatos[i].fecha);
-            data_x.push(nuevosDatos[i].datos[0]);
-            data_y.push(nuevosDatos[i].datos[1]);
-            data_z.push(nuevosDatos[i].datos[2]);
+         data_x.push(datos[sensorST][0].datos[0]);
+         data_y.push(datos[sensorST][0].datos[1]);
+         data_z.push(datos[sensorST][0].datos[2]);
+         fechas.push(new Date(datos[sensorST][0].fecha));
+
+        for(var i = 1; i < datos[sensorST].length; i++) {
+            var fecha = new Date(datos[sensorST][i].fecha);
+            fechas.push(fecha);
+            data_x.push(datos[sensorST][i].datos[0]);
+            data_y.push(datos[sensorST][i].datos[1]);
+            data_z.push(datos[sensorST][i].datos[2]);
         }
 
 
@@ -607,21 +601,18 @@ function preparacionDatos(sensorST){
             backgroundColor: 'rgb(' + r + ',' + g + ',' + b + ')',
             borderColor: 'rgb(' + r + ',' + g + ',' + b + ')',
             data: data_x,
-            spanGaps: true
         },
             {
                 label: nombre2,
                 backgroundColor: 'rgb(' + g + ',' + r + ',' + b + ')',
                 borderColor: 'rgb(' + g + ',' + r + ',' + b + ')',
                 data: data_y,
-                spanGaps: true
             },
             {
                 label: nombre3,
                 backgroundColor: 'rgb(' + r + ',' + b + ',' + g + ')',
                 borderColor: 'rgb(' + r + ',' + b + ',' + g + ')',
                 data: data_z,
-                spanGaps: true
             }]
     }
 
@@ -641,6 +632,7 @@ function creacionGrafica(data, sensorST){
       type: 'line',
       data: data,
       options: {
+        spanGaps: actualizacion[sensorST] + 5000,
         scales: {
           x: {
             type: "time",
@@ -649,16 +641,16 @@ function creacionGrafica(data, sensorST){
                 text: 'Fecha recogida de datos'
             },
             time: {
-                unit: 'second',
+                unit: 'minute',
                 displayFormats: {
-                        second: 'h:mm:ss a' // Formato de visualización del tiempo en el eje x
+                        second: 'd MMM h:mm a' // Formato de visualización del tiempo en el eje x
                 },
-                stepSize: actualizacion[sensorST] / 1000
+                stepSize: 1
             },
             ticks: {
                 display: true,
                 source: 'auto',
-                autoSkipPadding: 10
+                autoSkipPadding: 10,
             }
           },
           y: {
