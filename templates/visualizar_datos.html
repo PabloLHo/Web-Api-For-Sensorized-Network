@@ -8,6 +8,8 @@
     <meta name="description" content="Plataforma de muestreo de datos sensoriales captados por móvil">
     <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i&amp;display=swap">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.css">
 
     <link rel="stylesheet" href="static/css/vanilla-zoom.min.css">
@@ -57,7 +59,7 @@
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <form action="/visualizar_datos" method="post">
                                     <li><input type="submit" class="dropdown-item" name="sensor" value="Acelerómetro"></li>
-                                    <li><input type="submit" class="dropdown-item" name="sensor" value="Clima"></li>
+                                    <li><input type="submit" class="dropdown-item" name="sensor" value="Clima" disabled></li>
                                     <li><input type="submit" class="dropdown-item" name="sensor" value="Giroscopio"></li>
                                     <li><input type="submit" class="dropdown-item" name="sensor" value="Magnetómetro"></li>
                                     <li><input type="submit" class="dropdown-item" name="sensor" value="Podómetro"></li>
@@ -163,23 +165,15 @@
                                 <h6 class="text-primary fw-bold m-0">Aceleración del dispositivo</h6>
                                 <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
-                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
+                                        <p class="text-center dropdown-header">Filtros</p>
+                                        <a class="dropdown-item" id="TR-Acelerometro" onclick="setGrafica('TR', 'Acelerometro')" href="#">&nbsp;Tiempo real</a>
+                                        <a class="dropdown-item" onclick="setGrafica('UH', 'Acelerometro')" href="#">&nbsp;Última hora</a>
+                                        <a class="dropdown-item" onclick="setGrafica('UD', 'Acelerometro')" href="#">&nbsp;Último día</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="chart-area"><canvas id="grafica-Acelerometro"></canvas></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="TR-Acelerometro" class="col-lg-10 col-xl-10">
-                        <div class="card shadow mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-primary fw-bold m-0">Aceleración del dispositivo en tiempo real</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-area"><canvas id="grafica-TR-Acelerometro"></canvas></div>
                             </div>
                         </div>
                     </div>
@@ -236,23 +230,15 @@
                                 <h6 class="text-primary fw-bold m-0">Aceleración del dispositivo</h6>
                                 <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
-                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
+                                        <p class="text-center dropdown-header">Filtros</p>
+                                        <a class="dropdown-item" onclick="cambioGrafica('TR')" href="#">&nbsp;Tiempo real</a>
+                                        <a class="dropdown-item" onclick="cambioGrafica('UH')" href="#">&nbsp;Última hora</a>
+                                        <a class="dropdown-item" onclick="cambioGrafica('UD')" href="#">&nbsp;Último día</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="chart-area"><canvas id="grafica-Clima"></canvas></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="TR-Clima" class="col-lg-10 col-xl-10">
-                        <div class="card shadow mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-primary fw-bold m-0">Clima en tiempo real</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-area"><canvas id="grafica-TR-Clima"></canvas></div>
                             </div>
                         </div>
                     </div>
@@ -270,8 +256,10 @@
                                 <h6 class="text-primary fw-bold m-0">Batería</h6>
                                 <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
-                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
+                                        <p class="text-center dropdown-header">Filtros</p>
+                                        <a class="dropdown-item" id="TR-Bateria" onclick="setGrafica('TR', 'Bateria')" href="#">&nbsp;Tiempo real</a>
+                                        <a class="dropdown-item" onclick="setGrafica('UH', 'Bateria')" href="#">&nbsp;Última hora</a>
+                                        <a class="dropdown-item" onclick="setGrafica('UD', 'Bateria')" href="#">&nbsp;Último día</a>
                                     </div>
                                 </div>
                             </div>
@@ -388,23 +376,15 @@
                                 <h6 class="text-primary fw-bold m-0">Rotación del dispositivo</h6>
                                 <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
-                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
+                                        <p class="text-center dropdown-header">Filtros</p>
+                                        <a class="dropdown-item" id="TR-Giroscopio" onclick="setGrafica('TR', 'Giroscopio')" href="#">&nbsp;Tiempo real</a>
+                                        <a class="dropdown-item" onclick="setGrafica('UH', 'Giroscopio')" href="#">&nbsp;Última hora</a>
+                                        <a class="dropdown-item" onclick="setGrafica('UD', 'Giroscopio')" href="#">&nbsp;Último día</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="chart-area"><canvas id="grafica-Giroscopio"></canvas></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="TR-Giroscopio" class="col-lg-10 col-xl-10">
-                        <div class="card shadow mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-primary fw-bold m-0">Rotación del dispositivo en tiempo real</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-area"><canvas id="grafica-TR-Giroscopio"></canvas></div>
                             </div>
                         </div>
                     </div>
@@ -443,23 +423,15 @@
                                 <h6 class="text-primary fw-bold m-0">Fuerza del campo magnético del dispositivo</h6>
                                 <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
-                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
+                                        <p class="text-center dropdown-header">Filtros</p>
+                                        <a class="dropdown-item" id="TR-Magnetometro" onclick="setGrafica('TR', 'Magnetometro')" href="#">&nbsp;Tiempo real</a>
+                                        <a class="dropdown-item" onclick="setGrafica('UH', 'Magnetometro')" href="#">&nbsp;Última hora</a>
+                                        <a class="dropdown-item" onclick="setGrafica('UD', 'Magnetometro')" href="#">&nbsp;Último día</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="chart-area"><canvas id="grafica-Magnetometro"></canvas></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="TR-Magnetometro" class="col-lg-10 col-xl-10">
-                        <div class="card shadow mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-primary fw-bold m-0">Fuerza del campo magnético en tiempo real</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-area"><canvas id="grafica-TR-Magnetometro"></canvas></div>
                             </div>
                         </div>
                     </div>
@@ -542,23 +514,15 @@
                                 <h6 class="text-primary fw-bold m-0">Proximidad</h6>
                                 <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
-                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
+                                        <p class="text-center dropdown-header">Filtros</p>
+                                        <a class="dropdown-item" id="TR-Proximidad" onclick="setGrafica('TR', 'Proximidad')" href="#">&nbsp;Tiempo real</a>
+                                        <a class="dropdown-item" onclick="setGrafica('UH', 'Proximidad')" href="#">&nbsp;Última hora</a>
+                                        <a class="dropdown-item" onclick="setGrafica('UD', 'Proximidad')" href="#">&nbsp;Último día</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="chart-area"><canvas id="grafica-Proximidad"></canvas></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="TR-Proximidad" class="col-lg-10 col-xl-10">
-                        <div class="card shadow mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-primary fw-bold m-0">Proximidad en tiempo real</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-area"><canvas id="grafica-TR-Proximidad"></canvas></div>
                             </div>
                         </div>
                     </div>
@@ -588,23 +552,15 @@
                                 <h6 class="text-primary fw-bold m-0">Luminosidad</h6>
                                 <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
-                                        <p class="text-center dropdown-header">Filtros</p><a class="dropdown-item" href="#">&nbsp;Por minuto</a><a class="dropdown-item" href="#">&nbsp;Por hora</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Por dia</a>
+                                        <p class="text-center dropdown-header">Filtros</p>
+                                        <a class="dropdown-item" id="TR-Giroscopio" onclick="setGrafica('TR', 'Luminosidad')" href="#">&nbsp;Tiempo real</a>
+                                        <a class="dropdown-item" onclick="setGrafica('UH', 'Luminosidad')" href="#">&nbsp;Última hora</a>
+                                        <a class="dropdown-item" onclick="setGrafica('UD', 'Luminosidad')" href="#">&nbsp;Último día</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="chart-area"><canvas id="grafica-Luminosidad"></canvas></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="TR-Luminosidad" class="col-lg-10 col-xl-10" style="display: none">
-                        <div class="card shadow mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-primary fw-bold m-0">Luminosidad en tiempo real</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-area"><canvas id="grafica-TR-Luminosidad"></canvas></div>
                             </div>
                         </div>
                     </div>
