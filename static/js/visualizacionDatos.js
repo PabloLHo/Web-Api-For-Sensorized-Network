@@ -420,9 +420,9 @@ function setGrafica(tipo, sensor){
 
     fecha = new Date(datos[sensor][datos[sensor].length - 1].fecha);
     fechaIni = fecha;
-    if("TR")
+    if(tipo === "TR")
         fechaIni = sensorEncendido[sensor];
-    else if ("UH")
+    else if (tipo === "UH")
         fechaIni.setHours(fechaIni.getHours() - 1);
     else
         fechaIni.setMinutes(fechaIni.getMinutes() - 10);
