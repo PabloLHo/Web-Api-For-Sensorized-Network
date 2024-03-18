@@ -349,29 +349,33 @@ function actualizarGPS() {
 
             document.getElementById("actual-GPS-x").innerHTML = coordinates[0];
             document.getElementById("actual-GPS-y").innerHTML = coordinates[1];
+
+            if(seguimientoActivo())
+                crearSeguimiento();
         }
     });
 }
 
-function obtenerCoordenadas(){
-    var data = obtenerDatos(sensorST);
+async function obtenerCoordenadas(){
 
-    data.then((valor) => {
-        if(valor.length > 0) {
-            var coordinates = [];
+    var valor = await obtenerDatos("GPS");
+    if(valor.length > 0) {
+        var coordinates = [];
 
-            coordinates.push([valor[valor.length - 1].datos[1], valor[valor.length - 1].datos[0]]);
+        coordinates.push([valor[valor.length - 1].datos[1], valor[valor.length - 1].datos[0]]);
 
-            for(var i = valor.length - 2; i >= 0; i--){
-                var fecha = new Date(valor[i].fecha);
-                var fechaAnterior = new Date(valor[i + 1].fecha)
-                if( (fecha.getTime() -  fechaAnterior.getTime()) <= (actualizacion["GPS"] + 5000))
-                    coordinates.push([valor[i].datos[1], valor[i].datos[0]]);
-            }
+        for(var i = valor.length - 2; i >= 0; i--){
+            var fecha = new Date(valor[i].fecha);
+            var fechaAnterior = new Date(valor[i + 1].fecha);
 
-            return coordinates;
+            if( (fechaAnterior.getTime() -  fecha.getTime()) <= (actualizacion["GPS"] + 5000))
+                coordinates.push([valor[i].datos[1], valor[i].datos[0]]);
+            else
+                break;
         }
-    });
+
+        return coordinates;
+    }
 }
 
 function actualizarMiniBateria(){
@@ -422,10 +426,10 @@ function setGrafica(tipo, sensor){
     fechaIni = fecha;
     if(tipo === "TR")
         fechaIni = sensorEncendido[sensor];
-    else if (tipo === "UH")
-        fechaIni.setHours(fechaIni.getHours() - 1);
+    else if (tipo === "UD")
+        fechaIni.setHours(fechaIni.getDay() - 1);
     else
-        fechaIni.setMinutes(fechaIni.getMinutes() - 10);
+        fechaIni.setMinutes(fechaIni.getHours() - 1);
 
 
     for(var i = 0; i < datos[sensor].length; i++){

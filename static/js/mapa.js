@@ -74,6 +74,7 @@ function crearMapa(){
 			boton2.style.color = '#000000';
 			crearSeguimiento();
 		}else{
+			document.getElementById("sinRecorrido").style.display = "none";
 			boton2.style.color = '#ffffff';
 			map.removeLayer(lineLayer);
 		}
@@ -89,69 +90,76 @@ function crearMapa(){
 	map.addControl(NuevoControl2);
 }
 
-function crearSeguimiento(){
+async function crearSeguimiento(){
 
-	var coordinates = obtenerCoordenadas();
+	map.removeLayer(lineLayer);
+	var coordinates = await obtenerCoordenadas();
 
-	// var coordinates = [
-    // [-74.0060, 40.7128], // Nueva York
-    // [-118.2437, 34.0522], // Los Ángeles
-    // [-87.6298, 41.8781] // Chicago
-	// ];
+	if(coordinates.length < 2){
 
-	var lineStringFeature = new ol.Feature({
-		geometry: new ol.geom.LineString(coordinates)
-	});
+		document.getElementById("sinRecorrido").style.display = "block";
+		document.getElementById("sinRecorrido").innerHTML = "En el ultimo periodo solo hay un dato, no hay recorrido posible";
 
-	var startMarker = new ol.Feature({
-		geometry: new ol.geom.Point(coordinates[0])
-	});
+	}else {
 
-	var endMarker = new ol.Feature({
-		geometry: new ol.geom.Point(coordinates[coordinates.length - 1])
-	})
 
-	lineLayer = new ol.layer.Vector({
-		source: new ol.source.Vector({
-			features: [
-				lineStringFeature,
-				startMarker,
-				endMarker,
-			]
+		var lineStringFeature = new ol.Feature({
+			geometry: new ol.geom.LineString(coordinates)
+		});
+
+		var startMarker = new ol.Feature({
+			geometry: new ol.geom.Point(coordinates[0])
+		});
+
+		var endMarker = new ol.Feature({
+			geometry: new ol.geom.Point(coordinates[coordinates.length - 1])
 		})
-	});
 
-	// Crear un estilo para los marcadores
-	var startMarkerStyle = new ol.style.Style({
-		image: new ol.style.Icon({
-		  anchor: [0.5, 1],
-		  src: 'static/img/icon.png',
-		}),
-	});
+		lineLayer = new ol.layer.Vector({
+			source: new ol.source.Vector({
+				features: [
+					lineStringFeature,
+					startMarker,
+					endMarker,
+				]
+			})
+		});
 
-	var endMarkerStyle = new ol.style.Style({
-		image: new ol.style.Icon({
-		  anchor: [0.5, 1],
-		  src: 'static/img/icon2.png',
-		}),
-	});
+		// Crear un estilo para los marcadores
+		var startMarkerStyle = new ol.style.Style({
+			image: new ol.style.Icon({
+				anchor: [0.5, 1],
+				src: 'static/img/icon.png',
+			}),
+		});
 
-	// Aplicar el estilo a los marcadores
-	startMarker.setStyle(startMarkerStyle);
-	endMarker.setStyle(endMarkerStyle);
+		var endMarkerStyle = new ol.style.Style({
+			image: new ol.style.Icon({
+				anchor: [0.5, 1],
+				src: 'static/img/icon2.png',
+			}),
+		});
 
-	var lineStyle = new ol.style.Style({
-		stroke: new ol.style.Stroke({
-			color: 'blue', // Color de la línea
-			width: 3 // Anchura de la línea
-		})
-	});
+		// Aplicar el estilo a los marcadores
+		startMarker.setStyle(startMarkerStyle);
+		endMarker.setStyle(endMarkerStyle);
 
-	// Aplicar el estilo a la característica de la polilínea
-	lineStringFeature.setStyle(lineStyle);
+		var lineStyle = new ol.style.Style({
+			stroke: new ol.style.Stroke({
+				color: 'blue', // Color de la línea
+				width: 3 // Anchura de la línea
+			})
+		});
 
-	map.addLayer(lineLayer);
+		// Aplicar el estilo a la característica de la polilínea
+		lineStringFeature.setStyle(lineStyle);
+
+		map.addLayer(lineLayer);
+	}
 }
 
 
+function seguimientoActivo(){
+	return seguimiento;
+}
 
