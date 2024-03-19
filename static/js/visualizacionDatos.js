@@ -463,12 +463,13 @@ function setGrafica(tipo, sensor){
             for (var i = datos[sensor].length - 2; i >= 0; i--) {
                 fecha = new Date(datos[sensor][i].fecha);
                 fechaAnterior = new Date(datos[sensor][i + 1].fecha);
-                if ((fechaAnterior.getTime() - fecha.getTime()) > (actualizacion[sensor] + 5000)) {
+                if ((fechaAnterior.getTime() - fecha.getTime()) > (actualizacion[sensor] + actualizacion[sensor] / 2)) {
                     fechaIni = fechaAnterior;
                     break;
                 }
             }
         }
+
     }else if (tipo === "UD")
         fechaIni.setHours(fechaIni.getHours() - 24);
     else
@@ -576,7 +577,7 @@ function setGrafica(tipo, sensor){
     };
 
     if(sensor === "Bateria"){
-        config.options.scales.y.max = 100;
+        config.options.scales.y.max = 110;
         config.options.scales.y.min = 0;
     }
 
