@@ -22,7 +22,7 @@ function onload() {
         document.getElementById("indicadorBateria").style.display = "none";
     else if(valor !== "Todos") {
         actualizarMiniBateria();
-        window.setInterval(window["actualizarMiniBateria"], actualizacion["Bateria"]);
+        window.setInterval(window["actualizarMiniBateria"], 5000);
     }
 
     if (valor === "Todos") {
@@ -34,7 +34,7 @@ function onload() {
             document.getElementById(sensores[i]).style.display = "block";
             document.getElementById("separador-" + sensores[i]).style.display = "block";
             window["actualizar" + sensores[i]]();
-            window.setInterval(window["actualizar" + sensores[i]], actualizacion[sensores[i]]);
+            window.setInterval(window["actualizar" + sensores[i]], actualizacion[sensores[i]] / 5);
 
         }
 
@@ -43,7 +43,7 @@ function onload() {
         sensorST = valor.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         document.getElementById(sensorST).style.display = "block";
         window["actualizar" + sensorST]();
-        window.setInterval(window["actualizar" + sensorST], actualizacion[sensorST]);
+        window.setInterval(window["actualizar" + sensorST], actualizacion[sensorST] / 5);
 
     }
 
@@ -115,13 +115,15 @@ function actualizarBateria() {
     var sensorST = "Bateria";
     var data = obtenerDatos(sensorST);
 
-
     data.then((valor) => {
         if(valor.length > 0) {
+
             var actual = valor[valor.length - 1].datos;
             var bateria = actual[0];
 
             guardarDatos(sensorST, valor);
+
+            console.log(valor);
 
             setGrafica(tpGrafica[sensorST], sensorST);
 
@@ -349,6 +351,7 @@ function actualizarGPS() {
 
             document.getElementById("actual-GPS-x").innerHTML = coordinates[0];
             document.getElementById("actual-GPS-y").innerHTML = coordinates[1];
+            document.getElementById("actual-GPS-z").innerHTML = valor[valor.length - 1].datos[2];
 
             if(seguimientoActivo())
                 crearSeguimiento();
@@ -356,22 +359,44 @@ function actualizarGPS() {
     });
 }
 
-async function obtenerCoordenadas(){
+
+async function obtenerCoordenadas(todas){
 
     var valor = await obtenerDatos("GPS");
     if(valor.length > 0) {
+
         var coordinates = [];
 
-        coordinates.push([valor[valor.length - 1].datos[1], valor[valor.length - 1].datos[0]]);
+        var lista = [];
+
+        if(todas){
+            coordinates = [];
+            lista.push([valor[valor.length - 1].datos[1], valor[valor.length - 1].datos[0]])
+        }else {
+            coordinates = [];
+            coordinates.push([valor[valor.length - 1].datos[1], valor[valor.length - 1].datos[0]]);
+        }
 
         for(var i = valor.length - 2; i >= 0; i--){
             var fecha = new Date(valor[i].fecha);
             var fechaAnterior = new Date(valor[i + 1].fecha);
-
-            if( (fechaAnterior.getTime() -  fecha.getTime()) <= (actualizacion["GPS"] + 5000))
-                coordinates.push([valor[i].datos[1], valor[i].datos[0]]);
-            else
-                break;
+            if(todas){
+                if ((fechaAnterior.getTime() - fecha.getTime()) <= (actualizacion["GPS"] + 5000)) {
+                    lista.push([valor[i].datos[1], valor[i].datos[0]]);
+                }
+                else {
+                    if(lista.length > 1)
+                        coordinates.push(lista);
+                    lista = [];
+                }
+                if(i === 0 && lista.length > 1)
+                    coordinates.push(lista);
+            }else {
+                if ((fechaAnterior.getTime() - fecha.getTime()) <= (actualizacion["GPS"] + 5000))
+                    coordinates.push([valor[i].datos[1], valor[i].datos[0]]);
+                else
+                    break
+            }
         }
 
         return coordinates;
@@ -403,6 +428,8 @@ function actualizarMiniBateria(){
 
 function setGrafica(tipo, sensor){
 
+
+
     var data = [];
     var fechas = [];
 
@@ -416,20 +443,36 @@ function setGrafica(tipo, sensor){
         fecha = new Date(myChart.config.data.labels[0]);
         var ultimaFecha = new Date(datos[sensor][datos[sensor].length - 1].fecha);
 
-        if(fecha.getTime() === ultimaFecha.getTime())
+        if(fecha.getTime() === ultimaFecha.getTime() && tipo === tpGrafica[sensor])
             return;
 
+        myChart.destroy();
+        graficas[sensor] = null;
     }
 
+    tpGrafica[sensor] = tipo;
 
     fecha = new Date(datos[sensor][datos[sensor].length - 1].fecha);
     fechaIni = fecha;
-    if(tipo === "TR")
-        fechaIni = sensorEncendido[sensor];
-    else if (tipo === "UD")
-        fechaIni.setHours(fechaIni.getDay() - 1);
+    if(tipo === "TR") {
+
+        var fechaAnterior = new Date();
+        fecha = new Date(datos[sensor][datos[sensor].length - 1].fecha);
+        if ((fechaAnterior.getTime() - fecha.getTime()) <= (actualizacion[sensor] + 5000)) {
+            fechaIni = fecha;
+            for (var i = datos[sensor].length - 2; i >= 0; i--) {
+                fecha = new Date(datos[sensor][i].fecha);
+                fechaAnterior = new Date(datos[sensor][i + 1].fecha);
+                if ((fechaAnterior.getTime() - fecha.getTime()) > (actualizacion[sensor] + 5000)) {
+                    fechaIni = fechaAnterior;
+                    break;
+                }
+            }
+        }
+    }else if (tipo === "UD")
+        fechaIni.setHours(fechaIni.getHours() - 24);
     else
-        fechaIni.setMinutes(fechaIni.getHours() - 1);
+        fechaIni.setHours(fechaIni.getHours() - 1);
 
 
     for(var i = 0; i < datos[sensor].length; i++){
@@ -451,7 +494,7 @@ function setGrafica(tipo, sensor){
         }
 
         datasets = [{
-            label: sensorST,
+            label: sensor,
             backgroundColor: 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')',
             borderColor: 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')',
             data: data,
@@ -549,7 +592,7 @@ async function encendidos(){
 
     var total = 0;
     for(var i = 0; i < todosSensores.length; i++){
-        sensorST = todosSensores[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        var sensorST = todosSensores[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         try {
             var data = await $.ajax({
                 url: '/' + sensorST,
