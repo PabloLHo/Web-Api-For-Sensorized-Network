@@ -56,7 +56,6 @@ svg.append("g")
 
 function tick() {
   // Push a new data point onto the back.
-  distancia = 0;
 
   var variable;
   if (distancia) {
