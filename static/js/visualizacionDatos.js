@@ -545,6 +545,7 @@ function setGrafica(tipo, sensor){
           datasets: datasets
       },
       options: {
+        spanGaps: actualizacion[sensorST] + 5000,
         scales: {
           x: {
             type: "time",
