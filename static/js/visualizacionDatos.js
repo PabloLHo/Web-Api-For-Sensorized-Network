@@ -498,7 +498,6 @@ function setGrafica(tipo, sensor){
             backgroundColor: 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')',
             borderColor: 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')',
             data: data,
-            spanGaps: true,
         }]
 
     }else {
@@ -519,21 +518,18 @@ function setGrafica(tipo, sensor){
             backgroundColor: 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')',
             borderColor: 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')',
             data: data_x,
-            spanGaps: true
         },
         {
             label: "Eje Y",
             backgroundColor: 'rgb(' + color[1] + ',' + color[0] + ',' + color[2] + ')',
             borderColor: 'rgb(' + color[1] + ',' + color[0] + ',' + color[2] + ')',
             data: data_y,
-            spanGaps: true
         },
         {
             label: "Eje Z",
             backgroundColor: 'rgb(' + color[0] + ',' + color[2] + ',' + color[1] + ')',
             borderColor: 'rgb(' + color[0] + ',' + color[2] + ',' + color[1] + ')',
             data: data_z,
-            spanGaps: true
         }]
 
     }
@@ -545,7 +541,7 @@ function setGrafica(tipo, sensor){
           datasets: datasets
       },
       options: {
-        spanGaps: actualizacion[sensorST] + 5000,
+        spanGaps: actualizacion[sensor] + 5000,
         scales: {
           x: {
             type: "time",
