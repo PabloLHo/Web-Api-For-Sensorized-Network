@@ -4,6 +4,7 @@ var valor;
 var datos = {"Podometro": [], "Bateria": [],"Giroscopio": [], "Magnetometro": [], "Acelerometro": [], "Proximidad": [], "Luminosidad": [], "Termometro": [], "Barometro": [], "Humedad": []};
 var sensores = ["Podometro", "Bateria", "Giroscopio", "Magnetometro", "Acelerometro", "Proximidad", "Luminosidad", "GPS", "Clima"];
 var todosSensores = ["Podometro", "Bateria", "Giroscopio", "Magnetometro", "Acelerometro", "Proximidad", "Luminosidad", "GPS", "Barometro", "Termometro", "Humedad"];
+var actualizado = {"Podometro": false, "Bateria": false,"Giroscopio": false, "Magnetometro": false, "Acelerometro": false, "Proximidad": false, "Luminosidad": false}
 var uniVariable = {"Podometro": true, "Bateria": true,"Giroscopio": false, "Magnetometro": false, "Acelerometro": false, "Proximidad": true, "Luminosidad": true, "Clima": false}
 var actualizacion = {"Podometro": 90000, "Bateria": 120000,"Giroscopio": 30000, "Magnetometro": 60000, "Acelerometro": 15000, "Proximidad": 15000, "Luminosidad": 30000,"GPS": 90000, "Clima": 600000};
 var unidades = { "Podometro": "Pasos", "Bateria": "%","Giroscopio": "Radianes / s", "Magnetometro": "µT", "Acelerometro": 'm / s', "Proximidad": "cm", "Luminosidad": "lx", "Clima": ["hPa", "ºC", "%"] }
@@ -88,7 +89,12 @@ function actualizarAcelerometro(){
 
             guardarDatos(sensorST, valor);
 
-            setGrafica(tpGrafica[sensorST], sensorST);
+            if(actualizado[sensorST])
+                actualizaGrafica(sensorST)
+            else {
+                setGrafica(tpGrafica[sensorST], sensorST);
+                actualizado[sensorST] = !actualizado[sensorST];
+            }
 
             var numero_x = actual[0];
             var numero_y = actual[1];
@@ -123,9 +129,13 @@ function actualizarBateria() {
 
             guardarDatos(sensorST, valor);
 
-            console.log(valor);
 
-            setGrafica(tpGrafica[sensorST], sensorST);
+            if(actualizado[sensorST])
+                actualizaGrafica(sensorST)
+            else {
+                setGrafica(tpGrafica[sensorST], sensorST);
+                actualizado[sensorST] = !actualizado[sensorST];
+            }
 
             var root = document.documentElement;
             root.style.setProperty('--carga', bateria + '%');
@@ -151,7 +161,12 @@ function actualizarGiroscopio() {
 
             guardarDatos(sensorST, valor);
 
-            setGrafica(tpGrafica[sensorST], sensorST);
+            if(actualizado[sensorST])
+                actualizaGrafica(sensorST)
+            else {
+                setGrafica(tpGrafica[sensorST], sensorST);
+                actualizado[sensorST] = !actualizado[sensorST];
+            }
 
             var numero_x = actual[0] * 180 / Math.PI;
             var numero_y = actual[1] * 180 / Math.PI;
@@ -184,7 +199,12 @@ function actualizarMagnetometro() {
 
             guardarDatos(sensorST, valor);
 
-            setGrafica(tpGrafica[sensorST], sensorST);
+            if(actualizado[sensorST])
+                actualizaGrafica(sensorST)
+            else {
+                setGrafica(tpGrafica[sensorST], sensorST);
+                actualizado[sensorST] = !actualizado[sensorST];
+            }
 
             var numero_x = actual[0];
             var numero_y = actual[1];
@@ -273,13 +293,18 @@ function actualizarLuminosidad() {
 
             guardarDatos(sensorST, valor);
 
-            setGrafica(tpGrafica[sensorST], sensorST);
+            if(actualizado[sensorST])
+                actualizaGrafica(sensorST)
+            else {
+                setGrafica(tpGrafica[sensorST], sensorST);
+                actualizado[sensorST] = !actualizado[sensorST];
+            }
 
             document.getElementById("actual-" + sensorST).innerHTML = actual;
 
             var textShadow1, textShadow2;
-            textShadow1 = '#fff 0 0 ' + (actual / 500 * 2) + 'px'; // Sombra más débil
-            textShadow2 = '#fcffbb 0 0 ' + (actual / 500 * 5) + 'px'; // Sombra más fuerte
+            textShadow1 = '#fff 0 0 ' + (actual / 250 * 2) + 'px'; // Sombra más débil
+            textShadow2 = '#fcffbb 0 0 ' + (actual / 250 * 5) + 'px'; // Sombra más fuerte
 
             var lightElement = document.getElementById('light');
             lightElement.style.textShadow = textShadow1 + ', ' + textShadow2;
@@ -298,7 +323,12 @@ function actualizarProximidad() {
 
             guardarDatos(sensorST, valor);
 
-            setGrafica(tpGrafica[sensorST], sensorST);
+            if(actualizado[sensorST])
+                actualizaGrafica(sensorST)
+            else {
+                setGrafica(tpGrafica[sensorST], sensorST);
+                actualizado[sensorST] = !actualizado[sensorST];
+            }
 
             document.getElementById("actual-" + sensorST).innerHTML = actual;
 
@@ -427,8 +457,7 @@ function actualizarMiniBateria(){
 
 function setGrafica(tipo, sensor){
 
-
-
+    document.getElementById("TR").style.display = "none";
     var data = [];
     var fechas = [];
 
@@ -439,14 +468,9 @@ function setGrafica(tipo, sensor){
 
     if(myChart){
 
-        fecha = new Date(myChart.config.data.labels[0]);
-        var ultimaFecha = new Date(datos[sensor][datos[sensor].length - 1].fecha);
-
-        if(fecha.getTime() === ultimaFecha.getTime() && tipo === tpGrafica[sensor])
-            return;
-
         myChart.destroy();
         graficas[sensor] = null;
+
     }
 
     tpGrafica[sensor] = tipo;
@@ -467,6 +491,10 @@ function setGrafica(tipo, sensor){
                     break;
                 }
             }
+        }else{
+            document.getElementById("TR").style.display = "block";
+            myChart.destroy();
+            return;
         }
 
     }else if (tipo === "UD")
@@ -582,6 +610,83 @@ function setGrafica(tipo, sensor){
     graficas[sensor] = myChart;
 }
 
+
+function actualizaGrafica(sensor){
+
+    var myChart = graficas[sensor];
+    var tipo = tpGrafica[sensor];
+
+    var data = [];
+    var fechas = [];
+
+    var fecha = new Date(myChart.config.data.labels[0]);
+    var ultimaFecha = new Date(datos[sensor][datos[sensor].length - 1].fecha);
+
+    if(fecha.getTime() === ultimaFecha.getTime() && tipo === tpGrafica[sensor])
+        return;
+
+    fecha = new Date(datos[sensor][datos[sensor].length - 1].fecha);
+    var fechaIni = fecha;
+
+    if(tipo === "TR") {
+
+        var fechaAnterior = new Date();
+        fecha = new Date(datos[sensor][datos[sensor].length - 1].fecha);
+        if ((fechaAnterior.getTime() - fecha.getTime()) <= (actualizacion[sensor] + 5000)) {
+            fechaIni = fecha;
+            for (var i = datos[sensor].length - 2; i >= 0; i--) {
+                fecha = new Date(datos[sensor][i].fecha);
+                fechaAnterior = new Date(datos[sensor][i + 1].fecha);
+                if ((fechaAnterior.getTime() - fecha.getTime()) > (actualizacion[sensor] + actualizacion[sensor] / 2)) {
+                    fechaIni = fechaAnterior;
+                    break;
+                }
+            }
+        }
+
+    }else if (tipo === "UD")
+        fechaIni.setHours(fechaIni.getHours() - 24);
+    else
+        fechaIni.setHours(fechaIni.getHours() - 1);
+
+    for(var i = 0; i < datos[sensor].length; i++){
+        fecha = new Date(datos[sensor][i].fecha)
+        if(fecha.getTime() >= fechaIni.getTime()){
+            data.push(datos[sensor][i].datos);
+            fechas.push(fecha);
+        }
+    }
+
+    myChart.config.data.labels = fechas;
+
+    if(uniVariable[sensor]) {
+
+        for(var i = data.length - 1; i >= 0; i--) {
+            data[i] = data[i][0];
+        }
+
+        myChart.config.data.datasets[0].data = data;
+
+    }else {
+
+        var data_x = [];
+        var data_y = [];
+        var data_z = [];
+
+        for(var i = 0; i < data.length; i++) {
+            data_x.push(data[i][0]);
+            data_y.push(data[i][1]);
+            data_z.push(data[i][2]);
+        }
+
+        myChart.config.data.datasets[0].data = data_x;
+        myChart.config.data.datasets[1].data = data_y;
+        myChart.config.data.datasets[2].data = data_z;
+    }
+
+    myChart.update();
+
+}
 
 //Control de los sensores encendidos
 

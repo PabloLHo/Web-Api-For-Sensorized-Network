@@ -1,7 +1,9 @@
-seguimiento = false;
-historial = false;
+var seguimiento = false;
+var historial = false;
+var posiciones = false;
 var lineLayer;
-var historyLayer;
+var historyLayer = [];
+var posicionesV = [];
 
 function crearMapa(){
 	var lyrSatelite = new ol.layer.Tile({
@@ -75,7 +77,8 @@ function crearMapa(){
 		if(!seguimiento){
 			boton2.style.color = '#000000';
 			boton.style.color = '#ffffff';
-			map.removeLayer(historyLayer);
+			for(var i = 0; i < historyLayer.length; i++)
+				map.removeLayer(historyLayer[i]);
 			historial = false;
 			crearSeguimiento();
 		}else{
@@ -111,7 +114,8 @@ function crearMapa(){
 			crearHistorial();
 		}else{
 			boton.style.color = '#ffffff';
-			map.removeLayer(historyLayer);
+			for(var i = 0; i < historyLayer.length; i++)
+				map.removeLayer(historyLayer[i]);
 		}
 		historial = !historial;
 	});
@@ -123,6 +127,34 @@ function crearMapa(){
 	elementoDiv.style.right = "3.5em";
 	var NuevoControl = new ol.control.Control({ element: elementoDiv });
 	map.addControl(NuevoControl);
+
+	var boton3 = document.createElement('button');
+	var icono3 = document.createElement('i');
+	icono3.className = 'fa fa-dot-circle-o';
+	icono3.style.cursor = 'pointer';
+	boton3.innerHTML = "";
+	boton3.appendChild(icono3);
+	boton3.title = "Historial posiciones"
+
+	boton3.addEventListener('click', function () {
+		if(!posiciones){
+			boton3.style.color = '#000000';
+			crearHistorialPos();
+		}else{
+			boton3.style.color = '#ffffff';
+			for(var i = 0; i < posicionesV.length; i++)
+				map.removeLayer(posicionesV[i]);
+		}
+		posiciones = !posiciones;
+	});
+
+	var elementoDiv3 = document.createElement('div');
+	elementoDiv3.className = 'ol-unselectable ol-control';
+	elementoDiv3.appendChild(boton3);
+	elementoDiv3.style.top = "8.5px";
+	elementoDiv3.style.right = "6.5em";
+	var NuevoControl3 = new ol.control.Control({ element: elementoDiv3 });
+	map.addControl(NuevoControl3);
 }
 
 async function crearSeguimiento(){
@@ -200,14 +232,13 @@ function seguimientoActivo() {
 
 async function crearHistorial(){
 
-	map.removeLayer(historyLayer);
+	for(var i = 0; i < historyLayer.length; i++)
+		map.removeLayer(historyLayer[i]);
 
 	var coordinates = await obtenerCoordenadas(true);
 
 
 	coordinates.forEach(function(route) {
-
-		console.log(route);
 
 		var lineStringFeature = new ol.Feature({
 			geometry: new ol.geom.LineString(route)
@@ -221,7 +252,7 @@ async function crearHistorial(){
 			geometry: new ol.geom.Point(route[route.length - 1])
 		});
 
-		historyLayer = new ol.layer.Vector({
+		layer = new ol.layer.Vector({
 			source: new ol.source.Vector({
 				features: [
 					lineStringFeature,
@@ -230,6 +261,8 @@ async function crearHistorial(){
 				]
 			})
 		});
+
+		historyLayer.push(layer);
 
 		// Crear un estilo para los marcadores
 		var startMarkerStyle = new ol.style.Style({
@@ -267,7 +300,44 @@ async function crearHistorial(){
 		// Aplicar el estilo a la característica de la polilínea
 		lineStringFeature.setStyle(lineStyle);
 
-		map.addLayer(historyLayer);
+		map.addLayer(layer);
 	});
 }
 
+async function crearHistorialPos(){
+
+	var valor = await obtenerDatos("GPS");
+
+	for(var i = 0; i < valor.length; i++){
+		const positionFeature = new ol.Feature();
+
+		var coordinates = [valor[i].datos[1], valor[i].datos[0]];
+
+		positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
+		positionFeature.setStyle(new ol.style.Style({
+			image: new ol.style.Circle({
+				radius: 7,
+				fill: new ol.style.Fill({
+					color: "red",
+				}),
+				stroke: new ol.style.Stroke({
+					color: '#fff',
+					width: 2,
+				}),
+			}),
+		}));
+
+		miPosicion = new ol.layer.Vector({
+			source: new ol.source.Vector({
+				features: [positionFeature],
+			}),
+		});
+
+		map.addLayer(miPosicion);
+
+		posicionesV.push(miPosicion);
+
+	}
+
+
+}
