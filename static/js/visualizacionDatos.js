@@ -278,8 +278,8 @@ function actualizarLuminosidad() {
             document.getElementById("actual-" + sensorST).innerHTML = actual;
 
             var textShadow1, textShadow2;
-            textShadow1 = '#fff 0 0 ' + (actual / 1000 * 2) + 'px'; // Sombra más débil
-            textShadow2 = '#fcffbb 0 0 ' + (actual / 1000 * 5) + 'px'; // Sombra más fuerte
+            textShadow1 = '#fff 0 0 ' + (actual / 500 * 2) + 'px'; // Sombra más débil
+            textShadow2 = '#fcffbb 0 0 ' + (actual / 500 * 5) + 'px'; // Sombra más fuerte
 
             var lightElement = document.getElementById('light');
             lightElement.style.textShadow = textShadow1 + ', ' + textShadow2;
