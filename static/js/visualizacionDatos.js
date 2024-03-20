@@ -40,7 +40,7 @@ function onload() {
 
     } else {
 
-        sensorST = valor.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        var sensorST = valor.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         document.getElementById(sensorST).style.display = "block";
         window["actualizar" + sensorST]();
         window.setInterval(window["actualizar" + sensorST], actualizacion[sensorST] / 5);
@@ -117,7 +117,7 @@ function actualizarBateria() {
 
     data.then((valor) => {
         if(valor.length > 0) {
-
+            console.log(valor);
             var actual = valor[valor.length - 1].datos;
             var bateria = actual[0];
 
@@ -145,7 +145,6 @@ function actualizarGiroscopio() {
     console.log("Actualizando " + sensorST);
 
     data.then((valor) => {
-        console.log(valor);
         if(valor.length > 0) {
             var actual = valor[valor.length - 1].datos;
 
@@ -279,8 +278,8 @@ function actualizarLuminosidad() {
             document.getElementById("actual-" + sensorST).innerHTML = actual;
 
             var textShadow1, textShadow2;
-            textShadow1 = '#fff 0 0 ' + (actual / 20000 * 2) + 'px'; // Sombra más débil
-            textShadow2 = '#fcffbb 0 0 ' + (actual / 20000 * 5) + 'px'; // Sombra más fuerte
+            textShadow1 = '#fff 0 0 ' + (actual / 1000 * 2) + 'px'; // Sombra más débil
+            textShadow2 = '#fcffbb 0 0 ' + (actual / 1000 * 5) + 'px'; // Sombra más fuerte
 
             var lightElement = document.getElementById('light');
             lightElement.style.textShadow = textShadow1 + ', ' + textShadow2;
